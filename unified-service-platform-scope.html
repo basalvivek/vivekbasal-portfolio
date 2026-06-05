@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Service Pro Management System — Scope | Vivek Basal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #faf8f5;
+      --white: #ffffff;
+      --ink: #1a1a1a;
+      --ink-light: #4a4a4a;
+      --ink-muted: #8a8a8a;
+      --accent: #c8a96e;
+      --accent-light: #f0e8d8;
+      --border: #e8e4de;
+    }
+
+    html, body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      line-height: 1.7;
+    }
+
+    /* ── TOP NAV ── */
+    .top-nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--white); border-bottom: 1px solid var(--border);
+      padding: 16px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      animation: fadeIn 0.5s ease forwards;
+    }
+    .nav-back {
+      display: flex; align-items: center; gap: 8px;
+      text-decoration: none; color: var(--ink-muted);
+      font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--accent); }
+    .nav-back svg { width: 14px; height: 14px; }
+    .nav-title { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 500; color: var(--ink); }
+    .nav-tag {
+      font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--accent); background: var(--accent-light); padding: 4px 12px; border-radius: 20px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--white); border-bottom: 1px solid var(--border);
+      padding: 64px 48px 56px;
+      opacity: 0; animation: fadeUp 0.7s ease 0.15s forwards;
+    }
+    .hero-eyebrow {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 16px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .hero-eyebrow::after { content: ''; display: block; width: 48px; height: 1px; background: var(--accent); }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(36px, 5vw, 56px); font-weight: 300;
+      line-height: 1.1; letter-spacing: -0.01em; margin-bottom: 20px;
+    }
+    .hero-title em { font-style: italic; color: var(--accent); }
+    .hero-desc { font-size: 15px; color: var(--ink-light); font-weight: 300; max-width: 680px; line-height: 1.8; }
+    .hero-meta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+    .meta-pill {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--ink-muted);
+      border: 1px solid var(--border); padding: 6px 14px; border-radius: 20px;
+    }
+    .meta-pill svg { width: 12px; height: 12px; }
+
+    /* ── CONTENT ── */
+    .content { max-width: 1100px; margin: 0 auto; padding: 0 48px 80px; }
+
+    /* ── SECTION ── */
+    .section {
+      padding: 64px 0 0;
+      opacity: 0; animation: fadeUp 0.6s ease forwards;
+    }
+    .section:nth-child(1) { animation-delay: 0.3s; }
+    .section:nth-child(2) { animation-delay: 0.45s; }
+    .section:nth-child(3) { animation-delay: 0.6s; }
+    .section:nth-child(4) { animation-delay: 0.75s; }
+    .section:nth-child(5) { animation-delay: 0.9s; }
+
+    .section-header { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; }
+    .section-num {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--accent-light);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Cormorant Garamond', serif; font-size: 14px; font-weight: 600; color: var(--accent);
+      flex-shrink: 0;
+    }
+    .section-title { font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 400; color: var(--ink); }
+    .section-divider { height: 1px; background: var(--border); margin-bottom: 32px; }
+
+    /* ── SCOPE CARDS ── */
+    .scope-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+    .scope-card {
+      background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 28px;
+      transition: all 0.25s ease;
+    }
+    .scope-card:hover { border-color: var(--accent-light); box-shadow: 0 4px 24px rgba(0,0,0,0.06); transform: translateY(-2px); }
+    .scope-card-icon {
+      width: 40px; height: 40px; background: var(--accent-light); border-radius: 8px;
+      display: flex; align-items: center; justify-content: center; margin-bottom: 14px;
+    }
+    .scope-card-icon svg { width: 20px; height: 20px; color: var(--accent); }
+    .scope-card-title { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 8px; }
+    .scope-card-desc { font-size: 13px; color: var(--ink-light); line-height: 1.7; font-weight: 300; }
+
+    /* ── STATUS PIPELINE ── */
+    .pipeline {
+      display: flex; flex-wrap: wrap; gap: 0;
+      background: var(--white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+    }
+    .pipe-stage {
+      flex: 1; min-width: 110px; padding: 18px 16px; text-align: center;
+      border-right: 1px solid var(--border); position: relative;
+    }
+    .pipe-stage:last-child { border-right: none; }
+    .pipe-stage::after {
+      content: '›'; position: absolute; right: -8px; top: 50%; transform: translateY(-50%);
+      font-size: 18px; color: var(--accent); z-index: 1;
+    }
+    .pipe-stage:last-child::after { display: none; }
+    .pipe-dot {
+      width: 10px; height: 10px; border-radius: 50%; margin: 0 auto 8px;
+    }
+    .pipe-label { font-size: 11px; font-weight: 500; color: var(--ink); letter-spacing: 0.03em; line-height: 1.4; }
+    .pipe-sub { font-size: 10px; color: var(--ink-muted); margin-top: 4px; font-weight: 300; }
+
+    /* ── FEATURES TABLE ── */
+    .feature-table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+    .feature-table thead tr { background: var(--accent-light); }
+    .feature-table th { text-align: left; padding: 14px 20px; font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
+    .feature-table td { padding: 14px 20px; font-size: 13.5px; color: var(--ink-light); border-top: 1px solid var(--border); line-height: 1.6; font-weight: 300; }
+    .feature-table tr:hover td { background: #fdfcfa; }
+    .badge { display: inline-block; font-size: 10px; font-weight: 500; letter-spacing: 0.08em; padding: 2px 8px; border-radius: 10px; text-transform: uppercase; }
+    .badge-green  { background: #e8f5e9; color: #2e7d32; }
+    .badge-amber  { background: #fff8e1; color: #e65100; }
+    .badge-blue   { background: #e3f2fd; color: #1565c0; }
+    .badge-purple { background: #f3e5f5; color: #6a1b9a; }
+
+    /* ── PROCESS FLOW ── */
+    .flow-container { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 40px; }
+    .flow-phases { display: flex; gap: 0; min-width: 820px; }
+    .flow-phase { flex: 1; position: relative; }
+    .flow-phase::after { content: ''; position: absolute; top: 28px; right: -12px; width: 24px; height: 2px; background: var(--border); z-index: 1; }
+    .flow-phase:last-child::after { display: none; }
+    .flow-arrow { position: absolute; top: 22px; right: -16px; font-size: 18px; color: var(--accent); z-index: 2; }
+    .flow-phase:last-child .flow-arrow { display: none; }
+    .flow-node { width: 56px; height: 56px; border-radius: 50%; background: var(--accent-light); border: 2px solid var(--accent); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; }
+    .flow-node svg { width: 24px; height: 24px; color: var(--accent); }
+    .flow-label { text-align: center; font-size: 12px; font-weight: 500; color: var(--ink); margin-bottom: 6px; }
+    .flow-sub { text-align: center; font-size: 11px; color: var(--ink-muted); font-weight: 300; line-height: 1.5; }
+
+    .flow-steps { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 32px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .flow-step { display: flex; gap: 16px; align-items: flex-start; }
+    .step-num { min-width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: var(--white); font-size: 11px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .step-content strong { display: block; font-size: 13.5px; font-weight: 500; color: var(--ink); margin-bottom: 3px; }
+    .step-content span { font-size: 13px; color: var(--ink-muted); font-weight: 300; }
+
+    /* ── DATA FLOW ── */
+    .dataflow-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--border); border-radius: 12px; overflow: hidden; }
+    .df-cell { background: var(--white); padding: 24px; }
+    .df-cell.center { display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--accent-light); text-align: center; }
+    .df-cell-title { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+    .df-item { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--ink-light); margin-bottom: 8px; font-weight: 300; }
+    .df-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+    .df-center-icon { width: 48px; height: 48px; background: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; box-shadow: 0 2px 12px rgba(200,169,110,0.2); }
+    .df-center-icon svg { width: 24px; height: 24px; color: var(--accent); }
+    .df-center-label { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 500; color: var(--ink); }
+
+    /* ── TECH STACK ── */
+    .tech-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+    .tech-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 20px; transition: all 0.25s ease; }
+    .tech-card:hover { border-color: var(--accent-light); box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+    .tech-layer { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+    .tech-name { font-size: 15px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
+    .tech-detail { font-size: 12px; color: var(--ink-muted); font-weight: 300; }
+    .tech-version { display: inline-block; margin-top: 6px; font-size: 10px; background: var(--accent-light); color: var(--accent); padding: 2px 8px; border-radius: 8px; }
+
+    /* ── MODULES ROADMAP ── */
+    .roadmap { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+    .roadmap-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+    .roadmap-card.done { border-left: 3px solid #2e7d32; }
+    .roadmap-card.planned { border-left: 3px solid var(--accent); opacity: 0.75; }
+    .roadmap-num { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 6px; }
+    .roadmap-title { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 6px; }
+    .roadmap-desc { font-size: 12px; color: var(--ink-muted); font-weight: 300; line-height: 1.6; }
+
+    /* ── CTA ── */
+    .cta-bar {
+      margin-top: 64px; padding: 40px;
+      background: var(--white); border: 1px solid var(--border); border-radius: 12px;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;
+    }
+    .cta-text strong { display: block; font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 400; color: var(--ink); margin-bottom: 6px; }
+    .cta-text span { font-size: 13px; color: var(--ink-muted); font-weight: 300; }
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px; background: var(--ink); color: var(--white);
+      text-decoration: none; border-radius: 8px;
+      font-size: 12px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
+      transition: all 0.25s ease;
+    }
+    .cta-btn:hover { background: var(--accent); transform: translateY(-2px); }
+    .cta-btn svg { width: 14px; height: 14px; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .top-nav { padding: 14px 20px; }
+      .nav-title { display: none; }
+      .hero { padding: 40px 20px; }
+      .content { padding: 0 20px 60px; }
+      .dataflow-grid { grid-template-columns: 1fr; }
+      .df-cell.center { order: -1; }
+      .flow-phases { flex-direction: column; min-width: unset; gap: 24px; }
+      .flow-phase::after { display: none; }
+      .flow-arrow { display: none; }
+      .cta-bar { flex-direction: column; align-items: flex-start; }
+      .pipeline { flex-direction: column; }
+      .pipe-stage { border-right: none; border-bottom: 1px solid var(--border); }
+      .pipe-stage::after { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="top-nav">
+    <a href="index.html" class="nav-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Back to Portfolio
+    </a>
+    <span class="nav-title">Service Pro Management System</span>
+    <span class="nav-tag">In Development</span>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <p class="hero-eyebrow">Proof of Concept · Field Service Operations</p>
+    <h1 class="hero-title">Service Pro<br/><em>Management System</em></h1>
+    <p class="hero-desc">
+      A full-stack CRM and operations platform built for field service businesses. It consolidates the entire customer journey — from the first enquiry through engineer visits, quotation, order confirmation, production, installation scheduling, and payment collection — into a single, role-aware web application.
+    </p>
+    <div class="hero-meta">
+      <span class="meta-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Module 1 Complete
+      </span>
+      <span class="meta-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
+        Role-Based Access (Admin / Staff)
+      </span>
+      <span class="meta-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        React + Node.js + PostgreSQL
+      </span>
+      <span class="meta-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Email Notifications via Gmail SMTP
+      </span>
+      <span class="meta-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        6 Modules Planned
+      </span>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- a. SCOPE -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-num">a</div>
+        <h2 class="section-title">Scope</h2>
+      </div>
+      <div class="section-divider"></div>
+      <div class="scope-grid">
+        <div class="scope-card">
+          <div class="scope-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <div class="scope-card-title">Customer Enquiry Management</div>
+          <div class="scope-card-desc">Log, assign, and track enquiries from first contact through quote, confirmation, and conversion to order. Full follow-up log history per enquiry with channel and status tracking.</div>
+        </div>
+        <div class="scope-card">
+          <div class="scope-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div class="scope-card-title">Engineer Visit Scheduling</div>
+          <div class="scope-card-desc">Schedule, reschedule, complete, or cancel site visits per enquiry. Assign engineers, set time slots and durations, and track visit status end-to-end with automated email notifications.</div>
+        </div>
+        <div class="scope-card">
+          <div class="scope-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div class="scope-card-title">Order & Payment Management</div>
+          <div class="scope-card-desc">Convert confirmed enquiries to orders. Track total amount, deposit, and balance payments. Record instalments with payment type, date, and method. Full payment history and pending payment views.</div>
+        </div>
+        <div class="scope-card">
+          <div class="scope-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div class="scope-card-title">Employee & Department Management</div>
+          <div class="scope-card-desc">Manage employees with auto-generated codes (EMP-0001), assign to multiple departments (Sales, Design, Installation, Manufacturing, Management), and control role-based access across the platform.</div>
+        </div>
+        <div class="scope-card">
+          <div class="scope-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <div class="scope-card-title">Dashboard & Reporting</div>
+          <div class="scope-card-desc">Admin dashboard with KPI cards for enquiry counts, order pipeline value, today's visits, and upcoming installations. Reports covering revenue, employee performance, enquiry sources, and trends over time.</div>
+        </div>
+        <div class="scope-card">
+          <div class="scope-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <div class="scope-card-title">Automated Email Notifications</div>
+          <div class="scope-card-desc">Gmail SMTP-powered transactional emails triggered on key events — visit scheduled/rescheduled/completed, order confirmations, and status updates — keeping customers and staff informed automatically.</div>
+        </div>
+      </div>
+
+      <!-- Enquiry status pipeline -->
+      <div style="margin-top: 28px;">
+        <div style="font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 14px;">Enquiry Status Pipeline</div>
+        <div class="pipeline">
+          <div class="pipe-stage">
+            <div class="pipe-dot" style="background:#64b5f6;"></div>
+            <div class="pipe-label">New</div>
+            <div class="pipe-sub">Logged</div>
+          </div>
+          <div class="pipe-stage">
+            <div class="pipe-dot" style="background:#ffa726;"></div>
+            <div class="pipe-label">In Progress</div>
+            <div class="pipe-sub">Assigned</div>
+          </div>
+          <div class="pipe-stage">
+            <div class="pipe-dot" style="background:#ab47bc;"></div>
+            <div class="pipe-label">Visit Scheduled</div>
+            <div class="pipe-sub">Engineer booked</div>
+          </div>
+          <div class="pipe-stage">
+            <div class="pipe-dot" style="background:#26a69a;"></div>
+            <div class="pipe-label">Visit Done</div>
+            <div class="pipe-sub">Surveyed</div>
+          </div>
+          <div class="pipe-stage">
+            <div class="pipe-dot" style="background:#5c6bc0;"></div>
+            <div class="pipe-label">Quote Sent</div>
+            <div class="pipe-sub">Awaiting decision</div>
+          </div>
+          <div class="pipe-stage">
+            <div class="pipe-dot" style="background:#66bb6a;"></div>
+            <div class="pipe-label">Confirmed</div>
+            <div class="pipe-sub">Ready for order</div>
+          </div>
+          <div class="pipe-stage">
+            <div class="pipe-dot" style="background:#c8a96e;"></div>
+            <div class="pipe-label">Converted</div>
+            <div class="pipe-sub">Order created</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order status pipeline -->
+      <div style="margin-top: 20px;">
+        <div style="font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 14px;">Order Status Pipeline</div>
+        <div class="pipeline">
+          <div class="pipe-stage">
+            <div class="pipe-dot" style="background:#64b5f6;"></div>
+            <div class="pipe-label">Confirmed</div>
+          </div>
+          <div class="pipe-stage">
+            <div class="pipe-dot" style="background:#ab47bc;"></div>
+            <div class="pipe-label">Deposit Paid</div>
+          </div>
+          <div class="pipe-stage">
+            <div class="pipe-dot" style="background:#ffa726;"></div>
+            <div class="pipe-label">In Production</div>
+          </div>
+          <div class="pipe-stage">
+            <div class="pipe-dot" style="background:#26a69a;"></div>
+            <div class="pipe-label">Ready to Install</div>
+          </div>
+          <div class="pipe-stage">
+            <div class="pipe-dot" style="background:#5c6bc0;"></div>
+            <div class="pipe-label">Install Scheduled</div>
+          </div>
+          <div class="pipe-stage">
+            <div class="pipe-dot" style="background:#42a5f5;"></div>
+            <div class="pipe-label">Installed</div>
+          </div>
+          <div class="pipe-stage">
+            <div class="pipe-dot" style="background:#66bb6a;"></div>
+            <div class="pipe-label">Completed</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- b. FEATURES & FUNCTIONALITY -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-num">b</div>
+        <h2 class="section-title">Features & Functionality</h2>
+      </div>
+      <div class="section-divider"></div>
+      <table class="feature-table">
+        <thead>
+          <tr>
+            <th>Module / Area</th>
+            <th>Key Functionality</th>
+            <th>Highlights</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Authentication</strong></td>
+            <td>JWT-based login with role middleware (Admin / Staff)</td>
+            <td>Protected routes; admin-only write operations enforced server-side</td>
+            <td><span class="badge badge-green">Live</span></td>
+          </tr>
+          <tr>
+            <td><strong>Customer Management</strong></td>
+            <td>CRUD with auto-codes (CUST-0001), search, multi-channel source tracking</td>
+            <td>Phone, WhatsApp, email, full address; linked enquiry history per customer</td>
+            <td><span class="badge badge-green">Live</span></td>
+          </tr>
+          <tr>
+            <td><strong>Enquiry Management</strong></td>
+            <td>Log enquiries with product interest, channel, priority, budget estimate</td>
+            <td>Auto-codes (ENQ-0001); assign to staff; full follow-up log with status transitions</td>
+            <td><span class="badge badge-green">Live</span></td>
+          </tr>
+          <tr>
+            <td><strong>Employee Management</strong></td>
+            <td>CRUD with auto-codes (EMP-0001); multi-department assignment</td>
+            <td>Departments: Sales, Design, Installation, Manufacturing, Management</td>
+            <td><span class="badge badge-green">Live</span></td>
+          </tr>
+          <tr>
+            <td><strong>Visit Scheduling</strong></td>
+            <td>Schedule, reschedule, complete, cancel visits per enquiry</td>
+            <td>Engineer assignment; duration tracking; email notifications on every status change</td>
+            <td><span class="badge badge-green">Live</span></td>
+          </tr>
+          <tr>
+            <td><strong>Daily Schedule View</strong></td>
+            <td>Engineer diary view filtered by date</td>
+            <td>All visits for the day with customer address, time slot, and status at a glance</td>
+            <td><span class="badge badge-green">Live</span></td>
+          </tr>
+          <tr>
+            <td><strong>Calendar View</strong></td>
+            <td>Visual calendar of all scheduled visits and installations</td>
+            <td>Admin-only; cross-engineer visibility for scheduling decisions</td>
+            <td><span class="badge badge-green">Live</span></td>
+          </tr>
+          <tr>
+            <td><strong>Order Management</strong></td>
+            <td>Convert confirmed enquiry to order; full order lifecycle tracking</td>
+            <td>Auto-codes (ORD-00001); total amount, deposit, balance; log history per order</td>
+            <td><span class="badge badge-green">Live</span></td>
+          </tr>
+          <tr>
+            <td><strong>Payment Tracking</strong></td>
+            <td>Record deposit and balance payments with method, date, and notes</td>
+            <td>Auto balance calculation; pending payments dashboard; payment history per order</td>
+            <td><span class="badge badge-green">Live</span></td>
+          </tr>
+          <tr>
+            <td><strong>Admin Dashboard</strong></td>
+            <td>KPI cards: enquiry counts, order pipeline value, visits today, upcoming installs</td>
+            <td>Recent enquiries, overdue items, today's visit schedule — all in one view</td>
+            <td><span class="badge badge-green">Live</span></td>
+          </tr>
+          <tr>
+            <td><strong>Reports</strong></td>
+            <td>Revenue reports, enquiry trends, source breakdown, employee performance</td>
+            <td>Date-range filtering; chart-ready data for frontend visualisation</td>
+            <td><span class="badge badge-green">Live</span></td>
+          </tr>
+          <tr>
+            <td><strong>Organisation Settings</strong></td>
+            <td>Configurable company name, contact info, branding settings</td>
+            <td>Admin-only write; staff can read; used globally across the platform</td>
+            <td><span class="badge badge-green">Live</span></td>
+          </tr>
+          <tr>
+            <td><strong>Email Notifications</strong></td>
+            <td>Automated transactional emails via Gmail SMTP</td>
+            <td>Async dispatch; visit confirmations, reschedule alerts, order updates</td>
+            <td><span class="badge badge-amber">Module 4</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Modules roadmap -->
+      <div style="margin-top: 28px;">
+        <div style="font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 14px;">Module Roadmap</div>
+        <div class="roadmap">
+          <div class="roadmap-card done">
+            <div class="roadmap-num">Module 1 ✓</div>
+            <div class="roadmap-title">Customer Enquiries</div>
+            <div class="roadmap-desc">Enquiry logging, follow-up logs, customer records, employee assignment</div>
+          </div>
+          <div class="roadmap-card planned">
+            <div class="roadmap-num">Module 2</div>
+            <div class="roadmap-title">Engineer Visit Scheduling</div>
+            <div class="roadmap-desc">Visit creation, rescheduling, completion, cancellation, daily diary</div>
+          </div>
+          <div class="roadmap-card planned">
+            <div class="roadmap-num">Module 3</div>
+            <div class="roadmap-title">Daily Schedule View</div>
+            <div class="roadmap-desc">Per-engineer day view for visit planning and conflict avoidance</div>
+          </div>
+          <div class="roadmap-card planned">
+            <div class="roadmap-num">Module 4</div>
+            <div class="roadmap-title">Email Notifications</div>
+            <div class="roadmap-desc">Gmail SMTP transactional emails on key status changes</div>
+          </div>
+          <div class="roadmap-card planned">
+            <div class="roadmap-num">Module 5</div>
+            <div class="roadmap-title">Employee & Department Mgmt</div>
+            <div class="roadmap-desc">Full CRUD for employees and departments with role assignments</div>
+          </div>
+          <div class="roadmap-card planned">
+            <div class="roadmap-num">Module 6</div>
+            <div class="roadmap-title">Order Management</div>
+            <div class="roadmap-desc">Convert enquiries to orders, track production, payments, and installation</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- c. PROCESS FLOW -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-num">c</div>
+        <h2 class="section-title">Pictorial Process Flow</h2>
+      </div>
+      <div class="section-divider"></div>
+      <div class="flow-container">
+        <div style="overflow-x:auto;">
+          <div class="flow-phases">
+            <div class="flow-phase">
+              <span class="flow-arrow">→</span>
+              <div class="flow-node">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              </div>
+              <div class="flow-label">Enquiry</div>
+              <div class="flow-sub">Customer logs interest</div>
+            </div>
+            <div class="flow-phase">
+              <span class="flow-arrow">→</span>
+              <div class="flow-node">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+              </div>
+              <div class="flow-label">Assign & Follow Up</div>
+              <div class="flow-sub">Staff assigned; logs added</div>
+            </div>
+            <div class="flow-phase">
+              <span class="flow-arrow">→</span>
+              <div class="flow-node">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              </div>
+              <div class="flow-label">Site Visit</div>
+              <div class="flow-sub">Engineer surveys & quotes</div>
+            </div>
+            <div class="flow-phase">
+              <span class="flow-arrow">→</span>
+              <div class="flow-node">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              </div>
+              <div class="flow-label">Confirm & Convert</div>
+              <div class="flow-sub">Quote accepted → Order</div>
+            </div>
+            <div class="flow-phase">
+              <span class="flow-arrow">→</span>
+              <div class="flow-node">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              </div>
+              <div class="flow-label">Payments</div>
+              <div class="flow-sub">Deposit & balance tracked</div>
+            </div>
+            <div class="flow-phase">
+              <div class="flow-node">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              </div>
+              <div class="flow-label">Install & Complete</div>
+              <div class="flow-sub">Production → Install → Done</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flow-steps">
+          <div class="flow-step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <strong>Customer Contacts — Enquiry Logged</strong>
+              <span>Staff logs the enquiry at /enquiries/new. Auto-code ENQ-0001 assigned. Customer record created (CUST-0001) or matched from existing. Product interest, channel (Phone/Email/Walk-in/Website), priority, and budget estimate recorded.</span>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <strong>Assign & Status → In Progress</strong>
+              <span>Admin assigns enquiry to a staff member. Status updated to In Progress. Follow-up logs added per interaction — each log captures channel, notes, and optional status change.</span>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <strong>Visit Scheduled → Engineer Surveys Site</strong>
+              <span>Admin creates a visit from the enquiry. Engineer assigned, date and time slot set. Status → Visit Scheduled. Email notification dispatched to customer. Visit appears on the engineer's Daily Schedule and admin Calendar view.</span>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <strong>Visit Completed → Quote Sent</strong>
+              <span>Engineer completes visit; admin marks it Complete. Enquiry status moves to Visit Done, then Quote Sent once the quotation is delivered to the customer (via email or in person).</span>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="step-num">5</div>
+            <div class="step-content">
+              <strong>Quote Accepted → Enquiry Confirmed → Order Created</strong>
+              <span>Customer confirms. Enquiry status → Confirmed. Admin clicks "Convert to Order" — an order record (ORD-00001) is created linked to the enquiry and customer. Enquiry status → Converted to Order.</span>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="step-num">6</div>
+            <div class="step-content">
+              <strong>Deposit Collected → Production Begins</strong>
+              <span>Deposit payment recorded against the order. Order status → Deposit Paid → In Production. Balance payment amount and expected installation date tracked throughout.</span>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="step-num">7</div>
+            <div class="step-content">
+              <strong>Ready to Install → Installation Scheduled → Installed → Completed</strong>
+              <span>Order progresses through production. Installation scheduled via the visit module. Final balance recorded upon completion. Order status → Completed. Full audit trail preserved in order logs and payment records.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- d. DATA FLOW -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-num">d</div>
+        <h2 class="section-title">Data Flow Diagram</h2>
+      </div>
+      <div class="section-divider"></div>
+      <div class="dataflow-grid">
+        <div class="df-cell">
+          <div class="df-cell-title">Inputs</div>
+          <div class="df-item"><div class="df-dot"></div>Staff / Admin Login (JWT)</div>
+          <div class="df-item"><div class="df-dot"></div>Customer Details (phone, address, source)</div>
+          <div class="df-item"><div class="df-dot"></div>Enquiry Data (product, channel, priority)</div>
+          <div class="df-item"><div class="df-dot"></div>Follow-up Log Entries</div>
+          <div class="df-item"><div class="df-dot"></div>Visit Schedule (engineer, date, time)</div>
+          <div class="df-item"><div class="df-dot"></div>Visit Completion / Reschedule</div>
+          <div class="df-item"><div class="df-dot"></div>Order Conversion (amount, deposit date)</div>
+          <div class="df-item"><div class="df-dot"></div>Payment Records (deposit / balance)</div>
+          <div class="df-item"><div class="df-dot"></div>Employee & Department Data</div>
+          <div class="df-item"><div class="df-dot"></div>Organisation Settings</div>
+        </div>
+
+        <div class="df-cell center">
+          <div class="df-center-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+          </div>
+          <div class="df-center-label">USP API Engine</div>
+          <div style="font-size:11px; color: var(--ink-muted); margin-top:6px; font-weight:300;">Node.js · Express · PostgreSQL</div>
+          <div style="margin-top:16px; font-size:11px; color:var(--ink-muted); line-height:1.8; font-weight:300; text-align:left; width:100%;">
+            ✦ JWT Auth Middleware<br/>
+            ✦ Role Guards (Admin/Staff)<br/>
+            ✦ Business Logic Controllers<br/>
+            ✦ Auto-Code Triggers (DB)<br/>
+            ✦ Updated_at Triggers<br/>
+            ✦ Email Dispatch (async)<br/>
+            ✦ RESTful JSON API
+          </div>
+        </div>
+
+        <div class="df-cell">
+          <div class="df-cell-title">Outputs</div>
+          <div class="df-item"><div class="df-dot"></div>Dashboard KPIs & Stats</div>
+          <div class="df-item"><div class="df-dot"></div>Enquiry List (filtered / searched)</div>
+          <div class="df-item"><div class="df-dot"></div>Customer Detail + Enquiry History</div>
+          <div class="df-item"><div class="df-dot"></div>Visit Schedule (daily + calendar)</div>
+          <div class="df-item"><div class="df-dot"></div>Order Detail + Log History</div>
+          <div class="df-item"><div class="df-dot"></div>Pending Payments List</div>
+          <div class="df-item"><div class="df-dot"></div>Payment History per Order</div>
+          <div class="df-item"><div class="df-dot"></div>Reports (revenue, performance, source)</div>
+          <div class="df-item"><div class="df-dot"></div>Email Notifications (visit / order)</div>
+          <div class="df-item"><div class="df-dot"></div>Employee Performance Data</div>
+        </div>
+      </div>
+
+      <!-- ER summary -->
+      <div style="margin-top: 20px; background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 24px;">
+        <div class="df-cell-title" style="margin-bottom: 14px;">Entity Relationship Summary</div>
+        <div style="font-family: 'DM Sans', monospace; font-size: 12.5px; color: var(--ink-muted); line-height: 2.2; font-weight: 300;">
+          <span style="color: var(--ink);">Departments</span> ↔ <span style="color: var(--ink);">Employees</span> (M:N via employee_departments)
+          <br/>
+          <span style="color: var(--ink);">Customers</span> → <span style="color: var(--ink);">Enquiries</span> (1:N) → <span style="color: var(--ink);">EnquiryLogs</span> (1:N)
+          <br/>
+          <span style="padding-left: 80px; display:inline-block;"></span> → <span style="color: var(--ink);">Visits</span> (1:N) → assigned to <span style="color: var(--ink);">Employee</span>
+          <br/>
+          <span style="padding-left: 80px; display:inline-block;"></span> → <span style="color: var(--ink);">Orders</span> (1:1) → <span style="color: var(--ink);">OrderLogs</span> (1:N)
+          <br/>
+          <span style="padding-left: 248px; display:inline-block;"></span> → <span style="color: var(--ink);">OrderPayments</span> (1:N)
+          <br/>
+          All tables: <span style="color: var(--ink);">created_at</span>, <span style="color: var(--ink);">updated_at</span> auto-maintained via DB triggers
+        </div>
+      </div>
+    </section>
+
+    <!-- e. TECH STACK -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-num">e</div>
+        <h2 class="section-title">Technology Stack</h2>
+      </div>
+      <div class="section-divider"></div>
+      <div class="tech-grid">
+        <div class="tech-card">
+          <div class="tech-layer">Frontend</div>
+          <div class="tech-name">React</div>
+          <div class="tech-detail">SPA with React Router; functional components and hooks throughout</div>
+          <div class="tech-version">v18 · CRA</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-layer">Backend</div>
+          <div class="tech-name">Node.js + Express</div>
+          <div class="tech-detail">RESTful API with controller/route separation; async/await throughout</div>
+          <div class="tech-version">Node v18+</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-layer">Database</div>
+          <div class="tech-name">PostgreSQL</div>
+          <div class="tech-detail">Relational DB with triggers for auto-codes and updated_at timestamps</div>
+          <div class="tech-version">v14+</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-layer">Auth</div>
+          <div class="tech-name">JWT</div>
+          <div class="tech-detail">Token-based authentication; role middleware (Admin / Staff) enforced on all routes</div>
+          <div class="tech-version">jsonwebtoken</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-layer">HTTP Client</div>
+          <div class="tech-name">Axios</div>
+          <div class="tech-detail">Centralised API layer in frontend; proxied to backend on dev, configured for prod</div>
+          <div class="tech-version">axios</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-layer">Email</div>
+          <div class="tech-name">Nodemailer</div>
+          <div class="tech-detail">Async Gmail SMTP transactional emails; templated HTML notifications</div>
+          <div class="tech-version">nodemailer</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-layer">DB Driver</div>
+          <div class="tech-name">node-postgres (pg)</div>
+          <div class="tech-detail">Connection pool for all database queries; parameterised queries throughout</div>
+          <div class="tech-version">pg pool</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-layer">Dev Tooling</div>
+          <div class="tech-name">Nodemon</div>
+          <div class="tech-detail">Auto-reload on backend changes during development</div>
+          <div class="tech-version">npm run dev</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-layer">Environment</div>
+          <div class="tech-name">dotenv</div>
+          <div class="tech-detail">Environment variable management; .env.example provided for setup</div>
+          <div class="tech-version">.env</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-layer">Package Mgmt</div>
+          <div class="tech-name">npm</div>
+          <div class="tech-detail">Separate package.json for frontend and backend; proxy configured in frontend</div>
+          <div class="tech-version">npm</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-layer">Version Control</div>
+          <div class="tech-name">Git / GitHub</div>
+          <div class="tech-detail">Source code hosted on GitHub; structured commits per module</div>
+          <div class="tech-version">GitHub</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-layer">Planned</div>
+          <div class="tech-name">Railway / Cloud</div>
+          <div class="tech-detail">Cloud deployment target; PostgreSQL and Node.js service containers</div>
+          <div class="tech-version">Planned</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <div class="cta-bar">
+      <div class="cta-text">
+        <strong>View the Source Code</strong>
+        <span>Full project source available on GitHub. Module 1 is complete — more modules in active development.</span>
+      </div>
+      <a href="https://github.com/basalvivek/Unified_Service_Platform" target="_blank" class="cta-btn">
+        View on GitHub
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+      </a>
+    </div>
+
+  </div><!-- /content -->
+
+</body>
+</html>

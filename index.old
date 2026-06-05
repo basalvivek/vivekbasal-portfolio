@@ -194,75 +194,6 @@
       line-height: 1.6;
     }
 
-    /* ── CAROUSEL WRAPPER ── */
-    .carousel-outer {
-      position: relative;
-    }
-    .carousel-track-wrap {
-      overflow: hidden;
-      border-radius: 0;
-    }
-    .carousel-track {
-      display: flex;
-      gap: 24px;
-      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      will-change: transform;
-    }
-    /* Nav arrows */
-    .carousel-nav {
-      display: flex;
-      gap: 10px;
-      justify-content: flex-end;
-      margin-bottom: 20px;
-    }
-    .carousel-btn {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      border: 1px solid var(--border);
-      background: var(--white);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      color: var(--ink-muted);
-      transition: all 0.2s ease;
-      flex-shrink: 0;
-    }
-    .carousel-btn:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      box-shadow: 0 2px 12px rgba(200,169,110,0.2);
-    }
-    .carousel-btn:disabled {
-      opacity: 0.3;
-      cursor: default;
-      pointer-events: none;
-    }
-    .carousel-btn svg { width: 14px; height: 14px; }
-    /* Dots */
-    .carousel-dots {
-      display: flex;
-      gap: 6px;
-      justify-content: center;
-      margin-top: 20px;
-    }
-    .carousel-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--border);
-      border: none;
-      cursor: pointer;
-      transition: all 0.2s;
-      padding: 0;
-    }
-    .carousel-dot.active {
-      background: var(--accent);
-      width: 20px;
-      border-radius: 3px;
-    }
-
     /* Projects grid */
     .projects-grid {
       display: grid;
@@ -435,7 +366,6 @@
       .right { padding: 40px 24px; }
       .right-heading { font-size: 32px; }
       .projects-grid { grid-template-columns: 1fr; }
-      .carousel-nav { margin-bottom: 16px; }
     }
   </style>
 </head>
@@ -487,334 +417,55 @@
       <p class="right-subheading">A curated collection of real-world applications built to explore, validate, and demonstrate modern technology solutions.</p>
     </div>
 
-    <!-- Carousel Nav -->
-    <div class="carousel-nav">
-      <button class="carousel-btn" id="prevBtn" onclick="carouselPrev()" disabled aria-label="Previous">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-      </button>
-      <button class="carousel-btn" id="nextBtn" onclick="carouselNext()" aria-label="Next">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-      </button>
+    <div class="projects-grid">
+
+      <!-- Project 1: Event Management -->
+      <a class="project-card" href="https://app.vivekbasal.co.uk" target="_blank">
+        <div style="display:flex; align-items:center; justify-content:space-between;">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+          </div>
+          <span class="card-tag">Live</span>
+        </div>
+
+        <div>
+          <div class="card-title">Event Management System</div>
+        </div>
+
+        <p class="card-desc">
+          A full-stack web application that streamlines the end-to-end lifecycle of event operations — from creation and scheduling to attendee registration and real-time capacity management. Built with enterprise-grade reliability using Spring Boot and PostgreSQL, it demonstrates how intelligent data architecture can eliminate manual overhead and deliver seamless event experiences at scale.
+        </p>
+
+        <div class="card-tech">
+          <span class="tech-pill">Spring Boot</span>
+          <span class="tech-pill">PostgreSQL</span>
+          <span class="tech-pill">Java 17</span>
+          <span class="tech-pill">Docker</span>
+          <span class="tech-pill">Railway</span>
+        </div>
+
+        <div class="card-link">
+          View Project
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </div>
+      </a>
+
+      <!-- Coming Soon Card -->
+      <div class="project-card coming-soon">
+        <div class="coming-soon-icon">✦</div>
+        <p class="coming-soon-text">More projects coming soon…</p>
+      </div>
+
     </div>
-
-    <div class="carousel-outer">
-      <div class="carousel-track-wrap">
-        <div class="carousel-track" id="carouselTrack">
-
-          <!-- ── CARD 1: Event Management (LIVE) ── -->
-          <div class="project-card" style="min-width: 320px; flex: 0 0 calc(50% - 12px);">
-            <div style="display:flex; align-items:center; justify-content:space-between;">
-              <div class="card-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                  <line x1="16" y1="2" x2="16" y2="6"/>
-                  <line x1="8" y1="2" x2="8" y2="6"/>
-                  <line x1="3" y1="10" x2="21" y2="10"/>
-                </svg>
-              </div>
-              <span class="card-tag">Live</span>
-            </div>
-            <div>
-              <div class="card-title">Event Management System</div>
-            </div>
-            <p class="card-desc">
-              A full-stack charitable trust management system for the United Digambar Jain Community. Covers end-to-end event operations — scheduling, member registration, activity assignment, rehearsal tracking, and financial management — across 12 fully completed modules.
-            </p>
-            <div class="card-tech">
-              <span class="tech-pill">Spring Boot</span>
-              <span class="tech-pill">PostgreSQL</span>
-              <span class="tech-pill">Java 17</span>
-              <span class="tech-pill">Docker</span>
-              <span class="tech-pill">Railway</span>
-            </div>
-            <div style="display:flex; gap:12px; margin-top:4px; flex-wrap:wrap;">
-              <a href="event-management-scope.html" class="card-link" style="text-decoration:none;">
-                Scope
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-              </a>
-              <a href="https://app.vivekbasal.co.uk" target="_blank" class="card-link" style="text-decoration:none; color: var(--ink-muted);">
-                Live App
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
-                </svg>
-              </a>
-            </div>
-          </div>
-
-          <!-- ── CARD 2: Unified Service Platform ── -->
-          <div class="project-card" style="min-width: 320px; flex: 0 0 calc(50% - 12px);">
-            <div style="display:flex; align-items:center; justify-content:space-between;">
-              <div class="card-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                  <polyline points="14 2 14 8 20 8"/>
-                  <line x1="16" y1="13" x2="8" y2="13"/>
-                  <line x1="16" y1="17" x2="8" y2="17"/>
-                </svg>
-              </div>
-              <span class="card-tag">In Development</span>
-            </div>
-            <div>
-              <div class="card-title">Service Pro Management System</div>
-            </div>
-            <p class="card-desc">
-              A full-stack CRM and operations platform for field service businesses. Manages the complete customer journey — enquiries, engineer visits, quoting, order confirmation, production tracking, installation scheduling, and payment collection — with role-based access for admin and staff.
-            </p>
-            <div class="card-tech">
-              <span class="tech-pill">React</span>
-              <span class="tech-pill">Node.js</span>
-              <span class="tech-pill">PostgreSQL</span>
-              <span class="tech-pill">Express</span>
-              <span class="tech-pill">JWT</span>
-            </div>
-            <div style="display:flex; gap:12px; margin-top:4px; flex-wrap:wrap;">
-              <a href="unified-service-platform-scope.html" class="card-link" style="text-decoration:none;">
-                Scope
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-              </a>
-              <a href="https://github.com/basalvivek/Unified_Service_Platform" target="_blank" class="card-link" style="text-decoration:none; color: var(--ink-muted);">
-                GitHub
-                <svg viewBox="0 0 24 24" fill="currentColor" style="width:14px;height:14px;"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-              </a>
-            </div>
-          </div>
-
-          <!-- ── CARD 3: SkyView EduLearn ── -->
-          <div class="project-card" style="min-width: 320px; flex: 0 0 calc(50% - 12px);">
-            <div style="display:flex; align-items:center; justify-content:space-between;">
-              <div class="card-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-                </svg>
-              </div>
-              <span class="card-tag">In Development</span>
-            </div>
-            <div>
-              <div class="card-title">SkyView EduLearn</div>
-            </div>
-            <p class="card-desc">
-              A full-stack education management platform with role-based course authoring, a four-level content hierarchy, teacher-to-admin approval workflow, a seven-question-type assessment engine, drag-and-drop exam scheduling, student portal, auto-marking, analytics, and audit logging.
-            </p>
-            <div class="card-tech">
-              <span class="tech-pill">Spring Boot</span>
-              <span class="tech-pill">PostgreSQL</span>
-              <span class="tech-pill">Java 17</span>
-              <span class="tech-pill">JWT</span>
-              <span class="tech-pill">Vanilla JS</span>
-            </div>
-            <div style="display:flex; gap:12px; margin-top:4px; flex-wrap:wrap;">
-              <a href="skyview-edulearn-scope.html" class="card-link" style="text-decoration:none;">
-                Scope
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-              </a>
-              <a href="https://github.com/basalvivek/SkyViewEduLearn" target="_blank" class="card-link" style="text-decoration:none; color: var(--ink-muted);">
-                GitHub
-                <svg viewBox="0 0 24 24" fill="currentColor" style="width:14px;height:14px;"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-              </a>
-            </div>
-          </div>
-
-          <!-- ── CARD 4: Databricks Sales Analysis ── -->
-          <div class="project-card" style="min-width: 320px; flex: 0 0 calc(50% - 12px);">
-            <div style="display:flex; align-items:center; justify-content:space-between;">
-              <div class="card-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-                </svg>
-              </div>
-              <span class="card-tag">Completed</span>
-            </div>
-            <div>
-              <div class="card-title">Databricks Sales Analysis</div>
-            </div>
-            <p class="card-desc">
-              An end-to-end FMCG sales data engineering pipeline on Databricks and Delta Lake. Ingests daily order files from two source companies, applies a Bronze → Silver → Gold medallion architecture with data quality transformations, merges both sources into a unified fact table, and delivers a Power BI sales dashboard.
-            </p>
-            <div class="card-tech">
-              <span class="tech-pill">Databricks</span>
-              <span class="tech-pill">PySpark</span>
-              <span class="tech-pill">Delta Lake</span>
-              <span class="tech-pill">S3</span>
-              <span class="tech-pill">Power BI</span>
-            </div>
-            <div style="display:flex; gap:12px; margin-top:4px; flex-wrap:wrap;">
-              <a href="databricks-sales-analysis-scope.html" class="card-link" style="text-decoration:none;">
-                Scope
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-              </a>
-              <a href="https://github.com/basalvivek/Databricks_Sales_Analysis" target="_blank" class="card-link" style="text-decoration:none; color: var(--ink-muted);">
-                GitHub
-                <svg viewBox="0 0 24 24" fill="currentColor" style="width:14px;height:14px;"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-              </a>
-            </div>
-          </div>
-
-          <!-- ── CARD 5: Databricks Transport Analysis ── -->
-          <div class="project-card" style="min-width: 320px; flex: 0 0 calc(50% - 12px);">
-            <div style="display:flex; align-items:center; justify-content:space-between;">
-              <div class="card-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                  <circle cx="12" cy="12" r="10"/>
-                  <line x1="2" y1="12" x2="22" y2="12"/>
-                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-                </svg>
-              </div>
-              <span class="card-tag">Completed</span>
-            </div>
-            <div>
-              <div class="card-title">Databricks Transport Analysis</div>
-            </div>
-            <p class="card-desc">
-              A production-grade ride-hailing analytics pipeline on Databricks Pipelines (DLT). Streams daily trip exports from S3 via Auto Loader through a Bronze → Silver → Gold medallion architecture, enforces DLT data quality expectations, maintains SCD Type 1 CDC upserts, and delivers city-partitioned Gold views across 10 Indian cities.
-            </p>
-            <div class="card-tech">
-              <span class="tech-pill">Databricks DLT</span>
-              <span class="tech-pill">PySpark</span>
-              <span class="tech-pill">Auto Loader</span>
-              <span class="tech-pill">Delta Lake</span>
-              <span class="tech-pill">S3</span>
-            </div>
-            <div style="display:flex; gap:12px; margin-top:4px; flex-wrap:wrap;">
-              <a href="databricks-transport-scope.html" class="card-link" style="text-decoration:none;">
-                Scope
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-              </a>
-              <a href="https://github.com/basalvivek/Databricks_Transport_Data_Analysis" target="_blank" class="card-link" style="text-decoration:none; color: var(--ink-muted);">
-                GitHub
-                <svg viewBox="0 0 24 24" fill="currentColor" style="width:14px;height:14px;"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-              </a>
-            </div>
-          </div>
-
-          <!-- ── CARD 6: Databricks eCommerce Analysis ── -->
-          <div class="project-card" style="min-width: 320px; flex: 0 0 calc(50% - 12px);">
-            <div style="display:flex; align-items:center; justify-content:space-between;">
-              <div class="card-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                  <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
-                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-                </svg>
-              </div>
-              <span class="card-tag">Completed</span>
-            </div>
-            <div>
-              <div class="card-title">Databricks eCommerce Analysis</div>
-            </div>
-            <p class="card-desc">
-              A multi-currency global eCommerce analytics pipeline on Databricks and Delta Lake. Ingests six raw datasets through a Bronze → Silver → Gold medallion architecture with entity-specific DQ transformations, derives revenue metrics with 7-currency FX conversion to INR, maps customers across 7 countries, and powers Databricks AI/BI Genie exploration.
-            </p>
-            <div class="card-tech">
-              <span class="tech-pill">Databricks</span>
-              <span class="tech-pill">PySpark</span>
-              <span class="tech-pill">Delta Lake</span>
-              <span class="tech-pill">Unity Catalog</span>
-              <span class="tech-pill">AI/BI Genie</span>
-            </div>
-            <div style="display:flex; gap:12px; margin-top:4px; flex-wrap:wrap;">
-              <a href="databricks-ecommerce-scope.html" class="card-link" style="text-decoration:none;">
-                Scope
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-              </a>
-              <a href="https://github.com/basalvivek/Databricks_eCommerse" target="_blank" class="card-link" style="text-decoration:none; color: var(--ink-muted);">
-                GitHub
-                <svg viewBox="0 0 24 24" fill="currentColor" style="width:14px;height:14px;"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-              </a>
-            </div>
-          </div>
-
-        </div><!-- /carousel-track -->
-      </div><!-- /carousel-track-wrap -->
-
-      <!-- Dots -->
-      <div class="carousel-dots" id="carouselDots"></div>
-    </div><!-- /carousel-outer -->
-
   </main>
 
 </div>
-
-<script>
-  // ── Carousel Logic ──
-  const track     = document.getElementById('carouselTrack');
-  const prevBtn   = document.getElementById('prevBtn');
-  const nextBtn   = document.getElementById('nextBtn');
-  const dotsWrap  = document.getElementById('carouselDots');
-
-  const cards     = track.querySelectorAll('.project-card');
-  const total     = cards.length;
-  let current     = 0;
-
-  // How many visible at once depends on width
-  function visibleCount() {
-    return window.innerWidth <= 768 ? 1 : 2;
-  }
-  function maxIndex() {
-    return total - visibleCount();
-  }
-
-  // Build dots
-  function buildDots() {
-    dotsWrap.innerHTML = '';
-    const pages = maxIndex() + 1;
-    for (let i = 0; i < pages; i++) {
-      const btn = document.createElement('button');
-      btn.className = 'carousel-dot' + (i === current ? ' active' : '');
-      btn.addEventListener('click', () => goTo(i));
-      dotsWrap.appendChild(btn);
-    }
-  }
-
-  function updateDots() {
-    const dots = dotsWrap.querySelectorAll('.carousel-dot');
-    dots.forEach((d, i) => d.classList.toggle('active', i === current));
-  }
-
-  function goTo(idx) {
-    current = Math.max(0, Math.min(idx, maxIndex()));
-    const cardWidth = cards[0].offsetWidth + 24; // gap
-    track.style.transform = `translateX(-${current * cardWidth}px)`;
-    prevBtn.disabled = current === 0;
-    nextBtn.disabled = current >= maxIndex();
-    updateDots();
-  }
-
-  function carouselPrev() { goTo(current - 1); }
-  function carouselNext() { goTo(current + 1); }
-
-  // Init
-  buildDots();
-  goTo(0);
-
-  // Resize
-  let resizeTimer;
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => {
-      buildDots();
-      goTo(Math.min(current, maxIndex()));
-    }, 150);
-  });
-
-  // Touch / swipe
-  let touchStartX = 0;
-  track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
-  track.addEventListener('touchend', e => {
-    const diff = touchStartX - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 50) diff > 0 ? carouselNext() : carouselPrev();
-  });
-</script>
 </body>
 </html>

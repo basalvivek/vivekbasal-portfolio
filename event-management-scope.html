@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Event Management System — Scope | Vivek Basal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #faf8f5;
+      --white: #ffffff;
+      --ink: #1a1a1a;
+      --ink-light: #4a4a4a;
+      --ink-muted: #8a8a8a;
+      --accent: #c8a96e;
+      --accent-light: #f0e8d8;
+      --border: #e8e4de;
+    }
+
+    html, body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      line-height: 1.7;
+    }
+
+    /* ── TOP NAV ── */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      animation: fadeIn 0.5s ease forwards;
+    }
+    .nav-back {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--ink-muted);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--accent); }
+    .nav-back svg { width: 14px; height: 14px; }
+
+    .nav-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    .nav-tag {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 64px 48px 56px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.15s forwards;
+    }
+    .hero-eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .hero-eyebrow::after {
+      content: '';
+      display: block;
+      width: 48px;
+      height: 1px;
+      background: var(--accent);
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 300;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      margin-bottom: 20px;
+    }
+    .hero-title em { font-style: italic; color: var(--accent); }
+    .hero-desc {
+      font-size: 15px;
+      color: var(--ink-light);
+      font-weight: 300;
+      max-width: 680px;
+      line-height: 1.8;
+    }
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 32px;
+    }
+    .meta-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--ink-muted);
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 20px;
+    }
+    .meta-pill svg { width: 12px; height: 12px; }
+
+    /* ── CONTENT ── */
+    .content {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 48px 80px;
+    }
+
+    /* ── SECTION ── */
+    .section {
+      padding: 64px 0 0;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards;
+    }
+    .section:nth-child(1) { animation-delay: 0.3s; }
+    .section:nth-child(2) { animation-delay: 0.45s; }
+    .section:nth-child(3) { animation-delay: 0.6s; }
+    .section:nth-child(4) { animation-delay: 0.75s; }
+    .section:nth-child(5) { animation-delay: 0.9s; }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .section-num {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--accent-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 30px;
+      font-weight: 400;
+      color: var(--ink);
+    }
+    .section-divider {
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 32px;
+    }
+
+    /* ── SCOPE CARDS ── */
+    .scope-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .scope-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      transition: all 0.25s ease;
+    }
+    .scope-card:hover {
+      border-color: var(--accent-light);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+      transform: translateY(-2px);
+    }
+    .scope-card-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--accent-light);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+    }
+    .scope-card-icon svg { width: 20px; height: 20px; color: var(--accent); }
+    .scope-card-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .scope-card-desc {
+      font-size: 13px;
+      color: var(--ink-light);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    /* ── FEATURES TABLE ── */
+    .feature-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--white);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .feature-table thead tr {
+      background: var(--accent-light);
+    }
+    .feature-table th {
+      text-align: left;
+      padding: 14px 20px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .feature-table td {
+      padding: 14px 20px;
+      font-size: 13.5px;
+      color: var(--ink-light);
+      border-top: 1px solid var(--border);
+      line-height: 1.6;
+      font-weight: 300;
+    }
+    .feature-table tr:hover td { background: #fdfcfa; }
+    .badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      padding: 2px 8px;
+      border-radius: 10px;
+      text-transform: uppercase;
+    }
+    .badge-green { background: #e8f5e9; color: #2e7d32; }
+    .badge-blue  { background: #e3f2fd; color: #1565c0; }
+    .badge-amber { background: #fff8e1; color: #e65100; }
+
+    /* ── PROCESS FLOW ── */
+    .flow-container {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 40px;
+      overflow-x: auto;
+    }
+    .flow-phases {
+      display: flex;
+      gap: 0;
+      min-width: 800px;
+    }
+    .flow-phase {
+      flex: 1;
+      position: relative;
+    }
+    .flow-phase::after {
+      content: '';
+      position: absolute;
+      top: 28px;
+      right: -12px;
+      width: 24px;
+      height: 2px;
+      background: var(--border);
+      z-index: 1;
+    }
+    .flow-phase:last-child::after { display: none; }
+
+    .flow-arrow {
+      position: absolute;
+      top: 22px;
+      right: -16px;
+      font-size: 18px;
+      color: var(--accent);
+      z-index: 2;
+    }
+    .flow-phase:last-child .flow-arrow { display: none; }
+
+    .flow-node {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--accent-light);
+      border: 2px solid var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px;
+    }
+    .flow-node svg { width: 24px; height: 24px; color: var(--accent); }
+    .flow-label {
+      text-align: center;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .flow-sub {
+      text-align: center;
+      font-size: 11px;
+      color: var(--ink-muted);
+      font-weight: 300;
+      line-height: 1.5;
+    }
+    .flow-steps {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 32px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+    }
+    .flow-step {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .step-num {
+      min-width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: var(--white);
+      font-size: 11px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .step-content strong {
+      display: block;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 3px;
+    }
+    .step-content span {
+      font-size: 13px;
+      color: var(--ink-muted);
+      font-weight: 300;
+    }
+
+    /* ── DATA FLOW ── */
+    .dataflow-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      background: var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .df-cell {
+      background: var(--white);
+      padding: 24px;
+    }
+    .df-cell.center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent-light);
+      text-align: center;
+    }
+    .df-cell-title {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .df-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+      color: var(--ink-light);
+      margin-bottom: 8px;
+      font-weight: 300;
+    }
+    .df-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+    .df-center-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 12px rgba(200,169,110,0.2);
+    }
+    .df-center-icon svg { width: 24px; height: 24px; color: var(--accent); }
+    .df-center-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--ink);
+    }
+    .df-arrows {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+    }
+    .df-arrow-label {
+      font-size: 10px;
+      color: var(--ink-muted);
+      letter-spacing: 0.06em;
+      text-align: center;
+    }
+
+    /* ── TECH STACK ── */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .tech-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      transition: all 0.25s ease;
+    }
+    .tech-card:hover {
+      border-color: var(--accent-light);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    }
+    .tech-layer {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .tech-name {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+    .tech-detail {
+      font-size: 12px;
+      color: var(--ink-muted);
+      font-weight: 300;
+    }
+    .tech-version {
+      display: inline-block;
+      margin-top: 6px;
+      font-size: 10px;
+      background: var(--accent-light);
+      color: var(--accent);
+      padding: 2px 8px;
+      border-radius: 8px;
+    }
+
+    /* ── CTA ── */
+    .cta-bar {
+      margin-top: 64px;
+      padding: 40px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .cta-text strong {
+      display: block;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .cta-text span {
+      font-size: 13px;
+      color: var(--ink-muted);
+      font-weight: 300;
+    }
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: var(--ink);
+      color: var(--white);
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: all 0.25s ease;
+    }
+    .cta-btn:hover { background: var(--accent); transform: translateY(-2px); }
+    .cta-btn svg { width: 14px; height: 14px; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .top-nav { padding: 14px 20px; }
+      .nav-title { display: none; }
+      .hero { padding: 40px 20px; }
+      .content { padding: 0 20px 60px; }
+      .dataflow-grid { grid-template-columns: 1fr; }
+      .df-cell.center { order: -1; }
+      .flow-phases { flex-direction: column; min-width: unset; gap: 24px; }
+      .flow-phase::after { display: none; }
+      .flow-arrow { display: none; }
+      .cta-bar { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="top-nav">
+    <a href="index.html" class="nav-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Back to Portfolio
+    </a>
+    <span class="nav-title">Event Management System</span>
+    <span class="nav-tag">Live Project</span>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <p class="hero-eyebrow">Proof of Concept · Community Management</p>
+    <h1 class="hero-title">United Digambar Jain<br/><em>Community System</em></h1>
+    <p class="hero-desc">
+      A full-stack charitable trust management web application built for internal administrators of the United Digambar Jain Community. It streamlines the complete lifecycle of event operations — from creation and scheduling to member registration, activity assignments, rehearsal tracking, and financial management.
+    </p>
+    <div class="hero-meta">
+      <span class="meta-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Version 1.0.0
+      </span>
+      <span class="meta-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Internal Admin Users
+      </span>
+      <span class="meta-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        Desktop Web App
+      </span>
+      <span class="meta-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        12 Modules Completed
+      </span>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- a. SCOPE -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-num">a</div>
+        <h2 class="section-title">Scope</h2>
+      </div>
+      <div class="section-divider"></div>
+      <div class="scope-grid">
+        <div class="scope-card">
+          <div class="scope-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div class="scope-card-title">Event Lifecycle Management</div>
+          <div class="scope-card-desc">End-to-end creation, scheduling, venue coordination, and closure of community events with date-time pickers and PDF export.</div>
+        </div>
+        <div class="scope-card">
+          <div class="scope-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div class="scope-card-title">Member Registration</div>
+          <div class="scope-card-desc">Register Core Members, Team Leads, Participants, Volunteers, and Attendees with role-based filtering, QR code generation, and exportable member cards.</div>
+        </div>
+        <div class="scope-card">
+          <div class="scope-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          </div>
+          <div class="scope-card-title">Activity Assignment & Tracking</div>
+          <div class="scope-card-desc">Define categorised activities per event, bulk-assign members, and track status transitions from Pending → In-Progress → Completed with timestamps.</div>
+        </div>
+        <div class="scope-card">
+          <div class="scope-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div class="scope-card-title">Financial & Donation Management</div>
+          <div class="scope-card-desc">Track partner organisation participation with donation commitments, installment payment recording (Cash, Cheque, Bank Transfer, Card), and balance calculation.</div>
+        </div>
+        <div class="scope-card">
+          <div class="scope-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="scope-card-title">Rehearsal Scheduling</div>
+          <div class="scope-card-desc">Schedule practice sessions per activity, record attendance, track time-in/time-out, flag absences, and compute attendance percentages per member.</div>
+        </div>
+        <div class="scope-card">
+          <div class="scope-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <div class="scope-card-title">Progress Dashboard</div>
+          <div class="scope-card-desc">Real-time activity completion views, status distributions, member participation rates, overdue alerts, and PDF progress reports per event.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- b. FEATURES -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-num">b</div>
+        <h2 class="section-title">Features & Functionality</h2>
+      </div>
+      <div class="section-divider"></div>
+      <table class="feature-table">
+        <thead>
+          <tr>
+            <th>Module</th>
+            <th>Key Functionality</th>
+            <th>Highlights</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Admin Authentication</strong></td>
+            <td>Session-based login/logout with credential management</td>
+            <td>No Spring Security overhead — lean, fast auth</td>
+            <td><span class="badge badge-green">Live</span></td>
+          </tr>
+          <tr>
+            <td><strong>Organisation Settings</strong></td>
+            <td>Singleton record with logo, charity/VAT numbers, contact info</td>
+            <td>Globally displayed branding across all pages</td>
+            <td><span class="badge badge-green">Live</span></td>
+          </tr>
+          <tr>
+            <td><strong>Supportive Organisations</strong></td>
+            <td>Partner org CRUD with dual rep contacts</td>
+            <td>Search, filter, soft-delete, reusable across events</td>
+            <td><span class="badge badge-green">Live</span></td>
+          </tr>
+          <tr>
+            <td><strong>Event Management</strong></td>
+            <td>Full event CRUD with date-time calendar pickers</td>
+            <td>PDF export, 1-to-many venues, activities & participations</td>
+            <td><span class="badge badge-green">Live</span></td>
+          </tr>
+          <tr>
+            <td><strong>Venue Management</strong></td>
+            <td>Multiple venues per event with status tracking</td>
+            <td>Status flow: Proposed → Booked → Confirmed → Rejected</td>
+            <td><span class="badge badge-green">Live</span></td>
+          </tr>
+          <tr>
+            <td><strong>Participation & Payments</strong></td>
+            <td>Link orgs to events with donation amounts; installment tracking</td>
+            <td>Auto balance calculation; PDF payment history export</td>
+            <td><span class="badge badge-green">Live</span></td>
+          </tr>
+          <tr>
+            <td><strong>Member Registration</strong></td>
+            <td>6 role types, search/filter, QR code on member cards</td>
+            <td>PDF member card export; ZXing-based QR generation</td>
+            <td><span class="badge badge-green">Live</span></td>
+          </tr>
+          <tr>
+            <td><strong>Activity Categories</strong></td>
+            <td>Hall, Stage, Digital, Food, Cultural — reusable lookup</td>
+            <td>Case-insensitive uniqueness; safe delete guards</td>
+            <td><span class="badge badge-green">Live</span></td>
+          </tr>
+          <tr>
+            <td><strong>Activity Management</strong></td>
+            <td>Define tasks linked to events and categories</td>
+            <td>Dependency-aware CRUD with cascade relationships</td>
+            <td><span class="badge badge-green">Live</span></td>
+          </tr>
+          <tr>
+            <td><strong>Activity Assignment</strong></td>
+            <td>Bulk member assignment with status transitions</td>
+            <td>Conflict detection, performance dashboards</td>
+            <td><span class="badge badge-green">Live</span></td>
+          </tr>
+          <tr>
+            <td><strong>Rehearsal Scheduling</strong></td>
+            <td>Session creation, attendance marking, time tracking</td>
+            <td>Attendance % per activity; overlap blocking</td>
+            <td><span class="badge badge-green">Live</span></td>
+          </tr>
+          <tr>
+            <td><strong>Progress Dashboard</strong></td>
+            <td>Visual progress bars, completion rates, overdue alerts</td>
+            <td>Event readiness score; PDF progress reports</td>
+            <td><span class="badge badge-green">Live</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- c. PROCESS FLOW -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-num">c</div>
+        <h2 class="section-title">Pictorial Process Flow</h2>
+      </div>
+      <div class="section-divider"></div>
+      <div class="flow-container">
+        <!-- Visual phases -->
+        <div class="flow-phases">
+          <div class="flow-phase">
+            <span class="flow-arrow">→</span>
+            <div class="flow-node">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <div class="flow-label">Login</div>
+            <div class="flow-sub">Admin authenticates</div>
+          </div>
+          <div class="flow-phase">
+            <span class="flow-arrow">→</span>
+            <div class="flow-node">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <div class="flow-label">Create Event</div>
+            <div class="flow-sub">Set dates, contacts & venues</div>
+          </div>
+          <div class="flow-phase">
+            <span class="flow-arrow">→</span>
+            <div class="flow-node">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            </div>
+            <div class="flow-label">Register Members</div>
+            <div class="flow-sub">All roles onboarded</div>
+          </div>
+          <div class="flow-phase">
+            <span class="flow-arrow">→</span>
+            <div class="flow-node">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            </div>
+            <div class="flow-label">Assign Activities</div>
+            <div class="flow-sub">Bulk assignments, roles set</div>
+          </div>
+          <div class="flow-phase">
+            <span class="flow-arrow">→</span>
+            <div class="flow-node">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div class="flow-label">Rehearsals</div>
+            <div class="flow-sub">Schedule & track attendance</div>
+          </div>
+          <div class="flow-phase">
+            <div class="flow-node">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div class="flow-label">Monitor & Report</div>
+            <div class="flow-sub">Progress, payments, PDFs</div>
+          </div>
+        </div>
+
+        <!-- Step-by-step detail -->
+        <div class="flow-steps">
+          <div class="flow-step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <strong>Authenticate</strong>
+              <span>Admin logs in at /login → session created → redirected to dashboard home.</span>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <strong>One-time Setup</strong>
+              <span>Organisation details and logo configured at /organisation — displayed globally as header branding.</span>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <strong>Add Partner Organisations</strong>
+              <span>Supportive organisations registered at /supportive with representative contacts — reusable pool for participation.</span>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <strong>Create & Configure Event</strong>
+              <span>Event created at /events with name, dates, times, and contact details. Venues added with status tracking (Proposed → Confirmed).</span>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="step-num">5</div>
+            <div class="step-content">
+              <strong>Define Activities</strong>
+              <span>Activities created per event under categories (Hall, Stage, Digital, Food, Cultural) at /activities → each gets a unique activity_id.</span>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="step-num">6</div>
+            <div class="step-content">
+              <strong>Register Members & Assign</strong>
+              <span>Members registered with roles at /members. Bulk assigned to activities at /assignments with start/end dates and initial status = Pending.</span>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="step-num">7</div>
+            <div class="step-content">
+              <strong>Schedule Rehearsals</strong>
+              <span>Practice sessions created at /rehearsals, linked to activities. Attendance marked per session; overlap blocking enforced.</span>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="step-num">8</div>
+            <div class="step-content">
+              <strong>Track Participation & Collect Payments</strong>
+              <span>Partner orgs linked to events with donation amounts at /participations. Payments recorded in instalments at /payments; balances auto-calculated.</span>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="step-num">9</div>
+            <div class="step-content">
+              <strong>Monitor Progress & Export</strong>
+              <span>Progress dashboard at /progress shows activity completion rates, overdue alerts, rehearsal attendance summaries. All key data exportable to PDF.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- d. DATA FLOW -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-num">d</div>
+        <h2 class="section-title">Data Flow Diagram</h2>
+      </div>
+      <div class="section-divider"></div>
+      <div class="dataflow-grid">
+        <!-- Left: Inputs -->
+        <div class="df-cell">
+          <div class="df-cell-title">Inputs</div>
+          <div class="df-item"><div class="df-dot"></div>Admin Credentials</div>
+          <div class="df-item"><div class="df-dot"></div>Organisation Details</div>
+          <div class="df-item"><div class="df-dot"></div>Event Data (name, dates, venues)</div>
+          <div class="df-item"><div class="df-dot"></div>Member Registrations</div>
+          <div class="df-item"><div class="df-dot"></div>Activity Definitions</div>
+          <div class="df-item"><div class="df-dot"></div>Participation & Donations</div>
+          <div class="df-item"><div class="df-dot"></div>Payment Records</div>
+          <div class="df-item"><div class="df-dot"></div>Rehearsal Sessions</div>
+          <div class="df-item"><div class="df-dot"></div>Attendance Marks</div>
+        </div>
+
+        <!-- Centre: Core Application -->
+        <div class="df-cell center">
+          <div class="df-center-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+          </div>
+          <div class="df-center-label">UDJCS Engine</div>
+          <div style="font-size:11px; color: var(--ink-muted); margin-top:6px; font-weight:300;">Spring Boot · JPA · PostgreSQL</div>
+          <div style="margin-top:16px; font-size:11px; color:var(--ink-muted); line-height:1.6; font-weight:300;">
+            ✦ Session Authentication<br/>
+            ✦ Business Logic Services<br/>
+            ✦ JPA Repository Layer<br/>
+            ✦ Audit Timestamps<br/>
+            ✦ Soft Delete Pattern<br/>
+            ✦ Global Exception Handling
+          </div>
+        </div>
+
+        <!-- Right: Outputs -->
+        <div class="df-cell">
+          <div class="df-cell-title">Outputs</div>
+          <div class="df-item"><div class="df-dot"></div>Event Reports (PDF)</div>
+          <div class="df-item"><div class="df-dot"></div>Member Cards with QR Codes</div>
+          <div class="df-item"><div class="df-dot"></div>Payment History (PDF)</div>
+          <div class="df-item"><div class="df-dot"></div>Progress Dashboards</div>
+          <div class="df-item"><div class="df-dot"></div>Attendance Reports</div>
+          <div class="df-item"><div class="df-dot"></div>Activity Status Summaries</div>
+          <div class="df-item"><div class="df-dot"></div>Donation Balance Calculations</div>
+          <div class="df-item"><div class="df-dot"></div>Event Readiness Scores</div>
+          <div class="df-item"><div class="df-dot"></div>Overdue Alerts</div>
+        </div>
+      </div>
+
+      <!-- Entity relationships note -->
+      <div style="margin-top: 20px; background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 24px;">
+        <div class="df-cell-title" style="margin-bottom: 14px;">Entity Relationship Summary</div>
+        <div style="font-family: 'DM Sans', monospace; font-size: 12.5px; color: var(--ink-muted); line-height: 2; font-weight: 300;">
+          <span style="color: var(--ink);">Organisation</span> (singleton) → <span style="color: var(--ink);">Event</span> (1:N) → <span style="color: var(--ink);">Participation</span> (1:N) ← <span style="color: var(--ink);">SupportiveOrganisation</span> (1:N)
+          <br/>
+          <span style="padding-left: 88px; display: inline-block;"></span> → <span style="color: var(--ink);">Payment</span> (1:N)
+          <br/>
+          <span style="padding-left: 30px; display: inline-block;"></span>Event → <span style="color: var(--ink);">Venue</span> (1:N)
+          <br/>
+          <span style="padding-left: 30px; display: inline-block;"></span>Event → <span style="color: var(--ink);">Activity</span> (1:N) ← <span style="color: var(--ink);">ActivityCategory</span>
+          <br/>
+          <span style="padding-left: 108px; display: inline-block;"></span> → <span style="color: var(--ink);">Assignment</span> (1:N) → <span style="color: var(--ink);">Member</span>
+          <br/>
+          <span style="padding-left: 108px; display: inline-block;"></span> → <span style="color: var(--ink);">Rehearsal</span> (1:N) → <span style="color: var(--ink);">Member</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- e. TECH STACK -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-num">e</div>
+        <h2 class="section-title">Technology Stack</h2>
+      </div>
+      <div class="section-divider"></div>
+      <div class="tech-grid">
+        <div class="tech-card">
+          <div class="tech-layer">Backend</div>
+          <div class="tech-name">Spring Boot</div>
+          <div class="tech-detail">MVC + Spring Data JPA</div>
+          <div class="tech-version">v3.3.5</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-layer">Language</div>
+          <div class="tech-name">Java 17</div>
+          <div class="tech-detail">LTS · ORM via Hibernate 6</div>
+          <div class="tech-version">JDK 17</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-layer">Database</div>
+          <div class="tech-name">PostgreSQL</div>
+          <div class="tech-detail">Primary relational database; auto-schema via JPA</div>
+          <div class="tech-version">v16 · Docker</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-layer">Frontend</div>
+          <div class="tech-name">Thymeleaf</div>
+          <div class="tech-detail">Server-side templating with Layout Dialect</div>
+          <div class="tech-version">Layout Dialect</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-layer">UI Framework</div>
+          <div class="tech-name">Bootstrap 5</div>
+          <div class="tech-detail">Responsive layout; Bootstrap Icons 1.11 via CDN</div>
+          <div class="tech-version">v5 · CDN</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-layer">Build Tool</div>
+          <div class="tech-name">Maven</div>
+          <div class="tech-detail">Dependency management and project build lifecycle</div>
+          <div class="tech-version">v3.9.6</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-layer">QR Generation</div>
+          <div class="tech-name">ZXing</div>
+          <div class="tech-detail">QR codes on member cards; Core + JavaSE libraries</div>
+          <div class="tech-version">Core · JavaSE</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-layer">Email</div>
+          <div class="tech-name">Spring Mail</div>
+          <div class="tech-detail">Email notification support for member communications</div>
+          <div class="tech-version">Boot Mail</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-layer">Real-time</div>
+          <div class="tech-name">Spring WebSocket</div>
+          <div class="tech-detail">Live updates for activity status and progress tracking</div>
+          <div class="tech-version">WebSocket</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-layer">Containerisation</div>
+          <div class="tech-name">Docker</div>
+          <div class="tech-detail">PostgreSQL container via Docker Compose; Dockerfile included</div>
+          <div class="tech-version">Compose</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-layer">Deployment</div>
+          <div class="tech-name">Railway</div>
+          <div class="tech-detail">Cloud PaaS hosting; CI/CD via GitHub integration</div>
+          <div class="tech-version">Cloud PaaS</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-layer">Validation</div>
+          <div class="tech-name">Jakarta Bean Validation</div>
+          <div class="tech-detail">Server-side field validation with flash attribute feedback</div>
+          <div class="tech-version">Jakarta EE</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <div class="cta-bar">
+      <div class="cta-text">
+        <strong>See the Application Live</strong>
+        <span>The system is deployed and running on Railway. Click to access the live environment.</span>
+      </div>
+      <a href="https://app.vivekbasal.co.uk" target="_blank" class="cta-btn">
+        Launch Application
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+    </div>
+
+  </div><!-- /content -->
+
+</body>
+</html>

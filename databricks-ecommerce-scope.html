@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Databricks eCommerce Analysis — Scope | Vivek Basal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #faf8f5;
+      --white: #ffffff;
+      --ink: #1a1a1a;
+      --ink-light: #4a4a4a;
+      --ink-muted: #8a8a8a;
+      --accent: #c8a96e;
+      --accent-light: #f0e8d8;
+      --border: #e8e4de;
+    }
+
+    html, body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); line-height: 1.7; }
+
+    .top-nav { position: sticky; top: 0; z-index: 100; background: var(--white); border-bottom: 1px solid var(--border); padding: 16px 48px; display: flex; align-items: center; justify-content: space-between; animation: fadeIn 0.5s ease forwards; }
+    .nav-back { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--ink-muted); font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s; }
+    .nav-back:hover { color: var(--accent); }
+    .nav-back svg { width: 14px; height: 14px; }
+    .nav-title { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 500; }
+    .nav-tag { font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); background: var(--accent-light); padding: 4px 12px; border-radius: 20px; }
+
+    .hero { background: var(--white); border-bottom: 1px solid var(--border); padding: 64px 48px 56px; opacity: 0; animation: fadeUp 0.7s ease 0.15s forwards; }
+    .hero-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+    .hero-eyebrow::after { content: ''; display: block; width: 48px; height: 1px; background: var(--accent); }
+    .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(36px, 5vw, 56px); font-weight: 300; line-height: 1.1; letter-spacing: -0.01em; margin-bottom: 20px; }
+    .hero-title em { font-style: italic; color: var(--accent); }
+    .hero-desc { font-size: 15px; color: var(--ink-light); font-weight: 300; max-width: 680px; line-height: 1.8; }
+    .hero-meta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+    .meta-pill { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-muted); border: 1px solid var(--border); padding: 6px 14px; border-radius: 20px; }
+    .meta-pill svg { width: 12px; height: 12px; }
+
+    .content { max-width: 1100px; margin: 0 auto; padding: 0 48px 80px; }
+
+    .section { padding: 64px 0 0; opacity: 0; animation: fadeUp 0.6s ease forwards; }
+    .section:nth-child(1) { animation-delay: 0.3s; }
+    .section:nth-child(2) { animation-delay: 0.45s; }
+    .section:nth-child(3) { animation-delay: 0.6s; }
+    .section:nth-child(4) { animation-delay: 0.75s; }
+    .section:nth-child(5) { animation-delay: 0.9s; }
+    .section-header { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; }
+    .section-num { width: 36px; height: 36px; border-radius: 50%; background: var(--accent-light); display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 14px; font-weight: 600; color: var(--accent); flex-shrink: 0; }
+    .section-title { font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 400; color: var(--ink); }
+    .section-divider { height: 1px; background: var(--border); margin-bottom: 32px; }
+
+    .scope-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+    .scope-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 28px; transition: all 0.25s ease; }
+    .scope-card:hover { border-color: var(--accent-light); box-shadow: 0 4px 24px rgba(0,0,0,0.06); transform: translateY(-2px); }
+    .scope-card-icon { width: 40px; height: 40px; background: var(--accent-light); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
+    .scope-card-icon svg { width: 20px; height: 20px; color: var(--accent); }
+    .scope-card-title { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 8px; }
+    .scope-card-desc { font-size: 13px; color: var(--ink-light); line-height: 1.7; font-weight: 300; }
+
+    /* Medallion */
+    .medallion { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--border); border-radius: 12px; overflow: hidden; }
+    .med-layer { padding: 28px 24px; }
+    .med-layer.bronze { background: #fff8f0; }
+    .med-layer.silver { background: #f5f5f5; }
+    .med-layer.gold   { background: #fffcf0; }
+    .med-badge { display: inline-block; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; padding: 3px 10px; border-radius: 10px; margin-bottom: 12px; }
+    .med-badge.bronze { background: #f97316; color: #fff; }
+    .med-badge.silver { background: #6b7280; color: #fff; }
+    .med-badge.gold   { background: #ca8a04; color: #fff; }
+    .med-title { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 8px; }
+    .med-desc { font-size: 12.5px; color: var(--ink-light); font-weight: 300; line-height: 1.7; }
+    .med-item { font-size: 12px; color: var(--ink-muted); padding: 3px 0; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 6px; margin-top: 8px; }
+    .med-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+
+    /* Feature table */
+    .feature-table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+    .feature-table thead tr { background: var(--accent-light); }
+    .feature-table th { text-align: left; padding: 14px 20px; font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
+    .feature-table td { padding: 13px 20px; font-size: 13.5px; color: var(--ink-light); border-top: 1px solid var(--border); line-height: 1.6; font-weight: 300; }
+    .feature-table tr:hover td { background: #fdfcfa; }
+    .badge { display: inline-block; font-size: 10px; font-weight: 500; letter-spacing: 0.08em; padding: 2px 8px; border-radius: 10px; text-transform: uppercase; }
+    .badge-green { background: #e8f5e9; color: #2e7d32; }
+    .badge-blue  { background: #e3f2fd; color: #1565c0; }
+
+    /* DQ cards */
+    .dq-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+    .dq-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+    .dq-entity { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+    .dq-rule { display: flex; align-items: flex-start; gap: 8px; font-size: 12.5px; color: var(--ink-light); margin-bottom: 7px; font-weight: 300; line-height: 1.5; }
+    .dq-num { min-width: 18px; height: 18px; border-radius: 50%; background: var(--accent-light); color: var(--accent); font-size: 10px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+
+    /* Process flow */
+    .flow-container { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 40px; }
+    .flow-phases { display: flex; gap: 0; min-width: 800px; }
+    .flow-phase { flex: 1; position: relative; }
+    .flow-phase::after { content: ''; position: absolute; top: 28px; right: -12px; width: 24px; height: 2px; background: var(--border); z-index: 1; }
+    .flow-phase:last-child::after { display: none; }
+    .flow-arrow { position: absolute; top: 22px; right: -16px; font-size: 18px; color: var(--accent); z-index: 2; }
+    .flow-phase:last-child .flow-arrow { display: none; }
+    .flow-node { width: 56px; height: 56px; border-radius: 50%; background: var(--accent-light); border: 2px solid var(--accent); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; }
+    .flow-node svg { width: 24px; height: 24px; color: var(--accent); }
+    .flow-label { text-align: center; font-size: 12px; font-weight: 500; color: var(--ink); margin-bottom: 6px; }
+    .flow-sub { text-align: center; font-size: 11px; color: var(--ink-muted); font-weight: 300; line-height: 1.5; }
+    .flow-steps { display: grid; gap: 12px; margin-top: 32px; padding-top: 32px; border-top: 1px solid var(--border); }
+    .flow-step { display: flex; gap: 16px; align-items: flex-start; }
+    .step-num { min-width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: var(--white); font-size: 11px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .step-content strong { display: block; font-size: 13.5px; font-weight: 500; color: var(--ink); margin-bottom: 3px; }
+    .step-content span { font-size: 13px; color: var(--ink-muted); font-weight: 300; }
+
+    /* Data flow */
+    .dataflow-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--border); border-radius: 12px; overflow: hidden; }
+    .df-cell { background: var(--white); padding: 24px; }
+    .df-cell.center { display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--accent-light); text-align: center; }
+    .df-cell-title { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+    .df-item { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--ink-light); margin-bottom: 8px; font-weight: 300; }
+    .df-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+    .df-center-icon { width: 48px; height: 48px; background: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; box-shadow: 0 2px 12px rgba(200,169,110,0.2); }
+    .df-center-icon svg { width: 24px; height: 24px; color: var(--accent); }
+    .df-center-label { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 500; color: var(--ink); }
+
+    /* Tech stack */
+    .tech-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+    .tech-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 20px; transition: all 0.25s ease; }
+    .tech-card:hover { border-color: var(--accent-light); box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+    .tech-layer { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+    .tech-name { font-size: 15px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
+    .tech-detail { font-size: 12px; color: var(--ink-muted); font-weight: 300; }
+    .tech-version { display: inline-block; margin-top: 6px; font-size: 10px; background: var(--accent-light); color: var(--accent); padding: 2px 8px; border-radius: 8px; }
+
+    /* Countries */
+    .country-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+    .country-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; }
+    .country-name { font-size: 13px; font-weight: 500; color: var(--ink); }
+    .country-states { font-size: 11px; color: var(--ink-muted); font-weight: 300; margin-top: 3px; }
+
+    /* CTA */
+    .cta-bar { margin-top: 64px; padding: 40px; background: var(--white); border: 1px solid var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+    .cta-text strong { display: block; font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 400; color: var(--ink); margin-bottom: 6px; }
+    .cta-text span { font-size: 13px; color: var(--ink-muted); font-weight: 300; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: var(--ink); color: var(--white); text-decoration: none; border-radius: 8px; font-size: 12px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; transition: all 0.25s ease; }
+    .cta-btn:hover { background: var(--accent); transform: translateY(-2px); }
+    .cta-btn svg { width: 14px; height: 14px; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    @media (max-width: 768px) {
+      .top-nav { padding: 14px 20px; }
+      .nav-title { display: none; }
+      .hero { padding: 40px 20px; }
+      .content { padding: 0 20px 60px; }
+      .medallion, .dataflow-grid { grid-template-columns: 1fr; }
+      .flow-phases { flex-direction: column; min-width: unset; gap: 24px; }
+      .flow-phase::after, .flow-arrow { display: none; }
+      .cta-bar { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="top-nav">
+    <a href="index.html" class="nav-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Back to Portfolio
+    </a>
+    <span class="nav-title">Databricks eCommerce Analysis</span>
+    <span class="nav-tag">Completed</span>
+  </nav>
+
+  <div class="hero">
+    <p class="hero-eyebrow">Proof of Concept · Data Engineering & eCommerce Analytics</p>
+    <h1 class="hero-title">Databricks<br/><em>eCommerce Analysis Pipeline</em></h1>
+    <p class="hero-desc">
+      A complete multi-currency global eCommerce analytics pipeline built on Databricks and Delta Lake. It ingests six raw dimension and fact datasets from a Unity Catalog Volume, applies a Bronze → Silver → Gold medallion architecture with rich data quality transformations per entity, derives revenue metrics in local and INR-normalised currency across seven countries, and delivers a fully denormalised Gold view powering Databricks AI/BI Genie exploration and dashboard analysis.
+    </p>
+    <div class="hero-meta">
+      <span class="meta-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Bronze → Silver → Gold · 6 Notebooks
+      </span>
+      <span class="meta-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        7-Currency FX Conversion to INR
+      </span>
+      <span class="meta-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        7 Countries · Region Mapping
+      </span>
+      <span class="meta-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Databricks AI/BI Genie Exploration
+      </span>
+      <span class="meta-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        Unity Catalog Volumes · Delta Lake
+      </span>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- a. SCOPE -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-num">a</div>
+        <h2 class="section-title">Scope</h2>
+      </div>
+      <div class="section-divider"></div>
+      <div class="scope-grid">
+        <div class="scope-card">
+          <div class="scope-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+          </div>
+          <div class="scope-card-title">Six-Source Data Ingestion via Unity Catalog Volumes</div>
+          <div class="scope-card-desc">Six raw CSV datasets (brands, category, products, customers, date, order_items) are read from a Unity Catalog Volume path (/Volumes/ecommerce/source_data/raw/). Explicit schemas defined per source to catch anomalies at ingest — no inferSchema shortcut used.</div>
+        </div>
+        <div class="scope-card">
+          <div class="scope-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          </div>
+          <div class="scope-card-title">Medallion Architecture with Entity-Specific DQ</div>
+          <div class="scope-card-desc">Each of the six entities passes through its own Bronze → Silver → Gold transformation path. Silver applies entity-specific data quality rules: typo correction, case standardisation, unit stripping, anomaly mapping, negative value fixing, and multi-format date parsing.</div>
+        </div>
+        <div class="scope-card">
+          <div class="scope-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div class="scope-card-title">Multi-Currency FX Conversion to INR</div>
+          <div class="scope-card-desc">Order items carry prices in seven currencies (INR, AED, AUD, CAD, GBP, SGD, USD). A fixed-rate FX lookup DataFrame is joined at the Gold layer to compute sale_amount_inr — a normalised INR revenue metric enabling cross-country revenue comparison on a single scale.</div>
+        </div>
+        <div class="scope-card">
+          <div class="scope-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </div>
+          <div class="scope-card-title">Global Customer Dimension with Region Mapping</div>
+          <div class="scope-card-desc">Customers span seven countries: India, Australia, United Kingdom, United States, UAE, Singapore, and Canada. The Gold customer dimension enriches raw state codes with a country-aware region label (e.g. MH → West in India, FL → South in US, VIC → SouthEast in Australia).</div>
+        </div>
+        <div class="scope-card">
+          <div class="scope-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </div>
+          <div class="scope-card-title">Derived Revenue Metrics at Gold</div>
+          <div class="scope-card-desc">The Gold fact table derives four calculated fields per line item: gross_amount (qty × unit_price), discount_amount (gross × discount_pct / 100, ceiling-rounded), net_amount (gross − discount + tax), and net_amount_inr (net × FX rate). Coupon usage flagged as a binary coupon_flag column.</div>
+        </div>
+        <div class="scope-card">
+          <div class="scope-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <div class="scope-card-title">AI/BI Genie Exploration & Dashboard</div>
+          <div class="scope-card-desc">A fully denormalised Gold view (fact_transactions_denorm) joins the fact table with the date and product dimensions, exposing all analytical fields including hour_of_day. This powers Databricks AI/BI Genie for natural language business questions and a BI dashboard for revenue, product, and customer analysis.</div>
+        </div>
+      </div>
+
+      <!-- Medallion layer -->
+      <div style="margin-top: 28px;">
+        <div style="font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 14px;">Medallion Layer Structure — ecommerce Catalog</div>
+        <div class="medallion">
+          <div class="med-layer bronze">
+            <span class="med-badge bronze">Bronze</span>
+            <div class="med-title">Raw Ingestion Layer</div>
+            <div class="med-desc">Explicit-schema CSV reads from Unity Catalog Volumes. File path and ingest timestamp captured per record. Delta overwrite with mergeSchema.</div>
+            <div class="med-item"><div class="med-dot" style="background:#f97316;"></div>bronze.brz_brands</div>
+            <div class="med-item"><div class="med-dot" style="background:#f97316;"></div>bronze.brz_category</div>
+            <div class="med-item"><div class="med-dot" style="background:#f97316;"></div>bronze.brz_products</div>
+            <div class="med-item"><div class="med-dot" style="background:#f97316;"></div>bronze.brz_customers</div>
+            <div class="med-item"><div class="med-dot" style="background:#f97316;"></div>bronze.brz_date</div>
+            <div class="med-item"><div class="med-dot" style="background:#f97316;"></div>bronze.brz_order_items</div>
+          </div>
+          <div class="med-layer silver">
+            <span class="med-badge silver">Silver</span>
+            <div class="med-title">Cleansed & Enriched Layer</div>
+            <div class="med-desc">Entity-specific DQ transformations per table. Type casting, anomaly correction, deduplication, case normalisation, unit stripping, and spelling fixes applied.</div>
+            <div class="med-item"><div class="med-dot" style="background:#6b7280;"></div>silver.slv_brands</div>
+            <div class="med-item"><div class="med-dot" style="background:#6b7280;"></div>silver.slv_category</div>
+            <div class="med-item"><div class="med-dot" style="background:#6b7280;"></div>silver.slv_products</div>
+            <div class="med-item"><div class="med-dot" style="background:#6b7280;"></div>silver.slv_customers</div>
+            <div class="med-item"><div class="med-dot" style="background:#6b7280;"></div>silver.slv_date</div>
+            <div class="med-item"><div class="med-dot" style="background:#6b7280;"></div>silver.slv_order_items</div>
+          </div>
+          <div class="med-layer gold">
+            <span class="med-badge gold">Gold</span>
+            <div class="med-title">Analytics-Ready Layer</div>
+            <div class="med-desc">Joined, enriched, and metric-derived tables. FX conversion to INR. Region mapping on customers. Denormalised view for BI and Genie.</div>
+            <div class="med-item"><div class="med-dot" style="background:#ca8a04;"></div>gold.gld_dim_products</div>
+            <div class="med-item"><div class="med-dot" style="background:#ca8a04;"></div>gold.gld_dim_customers</div>
+            <div class="med-item"><div class="med-dot" style="background:#ca8a04;"></div>gold.gld_dim_date</div>
+            <div class="med-item"><div class="med-dot" style="background:#ca8a04;"></div>gold.gld_fact_order_items</div>
+            <div class="med-item"><div class="med-dot" style="background:#ca8a04;"></div>gold.fact_transactions_denorm (view)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Countries -->
+      <div style="margin-top: 20px;">
+        <div style="font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 14px;">7 Countries · Customer Geography</div>
+        <div class="country-grid">
+          <div class="country-card"><div class="country-name">🇮🇳 India</div><div class="country-states">MH · GJ · RJ · KA · TN · TS · AP · KL · UP · WB · DL</div></div>
+          <div class="country-card"><div class="country-name">🇦🇺 Australia</div><div class="country-states">VIC · WA · NSW · QLD</div></div>
+          <div class="country-card"><div class="country-name">🇬🇧 United Kingdom</div><div class="country-states">ENG · WLS · NIR · SCT</div></div>
+          <div class="country-card"><div class="country-name">🇺🇸 United States</div><div class="country-states">MA · FL · NJ · CA · NY · TX</div></div>
+          <div class="country-card"><div class="country-name">🇦🇪 United Arab Emirates</div><div class="country-states">AUH · DU · SHJ</div></div>
+          <div class="country-card"><div class="country-name">🇸🇬 Singapore</div><div class="country-states">SG</div></div>
+          <div class="country-card"><div class="country-name">🇨🇦 Canada</div><div class="country-states">BC · AB · ON · QC · NS</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- b. FEATURES & FUNCTIONALITY -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-num">b</div>
+        <h2 class="section-title">Features & Functionality</h2>
+      </div>
+      <div class="section-divider"></div>
+      <table class="feature-table">
+        <thead>
+          <tr>
+            <th>Notebook</th>
+            <th>Key Functionality</th>
+            <th>Techniques</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>setup_catalog</strong></td>
+            <td>Creates ecommerce Unity Catalog with Bronze, Silver, and Gold schemas via %sql magic</td>
+            <td>CREATE CATALOG / SCHEMA IF NOT EXISTS; USE CATALOG</td>
+            <td><span class="badge badge-green">Done</span></td>
+          </tr>
+          <tr>
+            <td><strong>1_dim_bronze</strong></td>
+            <td>Ingests brands, category, products, customers, and date CSVs from Unity Catalog Volume into five Bronze Delta tables with explicit schemas and file metadata</td>
+            <td>Explicit StructType schemas; _metadata.file_path; Delta overwrite + mergeSchema</td>
+            <td><span class="badge badge-green">Done</span></td>
+          </tr>
+          <tr>
+            <td><strong>2_dim_silver</strong></td>
+            <td>Applies entity-specific DQ transformations: brands (trim, special-char strip, category_code anomaly mapping), category (dedup, uppercase), products (unit strip, comma→dot, uppercase codes, material spelling, negative rating fix), customers (country-aware region derivation)</td>
+            <td>F.trim, F.regexp_replace, .replace() mapping, dropDuplicates, F.upper, F.abs, F.when multi-branch</td>
+            <td><span class="badge badge-green">Done</span></td>
+          </tr>
+          <tr>
+            <td><strong>3_dim_gold</strong></td>
+            <td>Builds Gold dimension tables: gld_dim_products (products × brands × category joined via CTE, COALESCE for nulls), gld_dim_customers (region enrichment via country-state map + UDF), gld_dim_date (passed through from silver)</td>
+            <td>SQL CTE; LEFT JOIN with COALESCE; Python dict-to-UDF region mapping; country-aware state resolution</td>
+            <td><span class="badge badge-green">Done</span></td>
+          </tr>
+          <tr>
+            <td><strong>1_fact_bronze</strong></td>
+            <td>Ingests daily order_items CSVs from Volume landing folder into Bronze Delta table. All columns loaded as StringType to safely capture mixed-format anomalies before transformation</td>
+            <td>All-StringType schema; landing folder path; _metadata capture; Delta overwrite</td>
+            <td><span class="badge badge-green">Done</span></td>
+          </tr>
+          <tr>
+            <td><strong>2_fact_silver</strong></td>
+            <td>Deduplicates on (order_id, item_seq). Cleans quantity ("Two"→2), unit_price ($-strip), discount_pct (%-strip), coupon_code (lower+trim), channel (web→Website, app→Mobile). Parses dt and order_ts across two date formats. Strips non-numeric from tax_amount.</td>
+            <td>F.when literal replacement; F.regexp_replace; F.coalesce + F.to_timestamp multi-format; F.lower; F.trim</td>
+            <td><span class="badge badge-green">Done</span></td>
+          </tr>
+          <tr>
+            <td><strong>3_fact_gold</strong></td>
+            <td>Derives gross_amount, discount_amount (ceil), net_amount, date_id, coupon_flag. Joins FX rates DataFrame to compute net_amount_inr (ceiling-rounded). Selects clean final schema as gld_fact_order_items.</td>
+            <td>F.ceil; FX rates broadcast join; F.date_format date_id; F.lit coupon flag; column rename to analytical aliases</td>
+            <td><span class="badge badge-green">Done</span></td>
+          </tr>
+          <tr>
+            <td><strong>fact_transactions_denorm (view)</strong></td>
+            <td>CREATE OR REPLACE VIEW joining gld_fact_order_items with gld_dim_date (date_id) and gld_dim_products (product_id). Adds extract(HOUR FROM transaction_ts) as hour_of_day for intraday analysis.</td>
+            <td>SQL CREATE VIEW; three-table JOIN; EXTRACT(HOUR) derived column</td>
+            <td><span class="badge badge-green">Done</span></td>
+          </tr>
+          <tr>
+            <td><strong>Databricks AI/BI Genie</strong></td>
+            <td>Natural language query exploration on the Gold view. Questions include: monthly revenue trends, top 10 products by August revenue, biggest revenue day, avg revenue per customer by channel, customer distribution by country, and avg revenue per region.</td>
+            <td>Databricks AI/BI Genie; NL-to-SQL on denorm view; pre-defined business questions</td>
+            <td><span class="badge badge-green">Done</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- DQ transformations -->
+      <div style="margin-top: 28px;">
+        <div style="font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 14px;">Data Quality Transformations at Silver Layer</div>
+        <div class="dq-grid">
+          <div class="dq-card">
+            <div class="dq-entity">Brands</div>
+            <div class="dq-rule"><div class="dq-num">1</div>Trim whitespace from brand_name (e.g. "  NovaWave " → "NovaWave")</div>
+            <div class="dq-rule"><div class="dq-num">2</div>Strip non-alphanumeric chars from brand_code via regexp_replace</div>
+            <div class="dq-rule"><div class="dq-num">3</div>Map category_code anomalies: GROCERY→GRCY, BOOKS→BKS, TOYS→TOY</div>
+          </div>
+          <div class="dq-card">
+            <div class="dq-entity">Category</div>
+            <div class="dq-rule"><div class="dq-num">1</div>Drop duplicates on category_code</div>
+            <div class="dq-rule"><div class="dq-num">2</div>Uppercase all category_code values (ce → CE, app → APP)</div>
+          </div>
+          <div class="dq-card">
+            <div class="dq-entity">Products</div>
+            <div class="dq-rule"><div class="dq-num">1</div>Strip "g" suffix from weight_grams and cast to Integer (e.g. "305g" → 305)</div>
+            <div class="dq-rule"><div class="dq-num">2</div>Replace comma with dot in length_cm and cast to Float ("22,2" → 22.2)</div>
+            <div class="dq-rule"><div class="dq-num">3</div>Uppercase category_code and brand_code</div>
+            <div class="dq-rule"><div class="dq-num">4</div>Fix material spelling: Coton→Cotton, Alumium→Aluminum, Ruber→Rubber</div>
+            <div class="dq-rule"><div class="dq-num">5</div>Convert negative rating_count to positive (F.abs)</div>
+          </div>
+          <div class="dq-card">
+            <div class="dq-entity">Order Items (Fact)</div>
+            <div class="dq-rule"><div class="dq-num">1</div>Deduplicate on (order_id, item_seq)</div>
+            <div class="dq-rule"><div class="dq-num">2</div>Convert "Two" → 2 in quantity; cast to Integer</div>
+            <div class="dq-rule"><div class="dq-num">3</div>Strip "$" from unit_price; cast to Double</div>
+            <div class="dq-rule"><div class="dq-num">4</div>Strip "%" from discount_pct; cast to Double</div>
+            <div class="dq-rule"><div class="dq-num">5</div>Lowercase + trim coupon_code</div>
+            <div class="dq-rule"><div class="dq-num">6</div>Map channel: web→Website, app→Mobile</div>
+            <div class="dq-rule"><div class="dq-num">7</div>Parse dt and order_ts across two timestamp formats via F.coalesce</div>
+            <div class="dq-rule"><div class="dq-num">8</div>Strip non-numeric chars from tax_amount; cast to Double</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FX rates -->
+      <div style="margin-top: 20px; background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 24px;">
+        <div style="font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px;">FX Rates Applied at Gold (as of 2025-10-15, base: INR = 1.00)</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 12px; font-size: 13px; color: var(--ink-muted); font-weight: 300;">
+          <span>INR = 1.00</span><span>·</span>
+          <span>AED = 24.18</span><span>·</span>
+          <span>AUD = 57.55</span><span>·</span>
+          <span>CAD = 62.93</span><span>·</span>
+          <span>GBP = 117.98</span><span>·</span>
+          <span>SGD = 68.18</span><span>·</span>
+          <span>USD = 88.29</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- c. PROCESS FLOW -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-num">c</div>
+        <h2 class="section-title">Pictorial Process Flow</h2>
+      </div>
+      <div class="section-divider"></div>
+      <div class="flow-container">
+        <div style="overflow-x:auto;">
+          <div class="flow-phases">
+            <div class="flow-phase">
+              <span class="flow-arrow">→</span>
+              <div class="flow-node">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              </div>
+              <div class="flow-label">Volume Source</div>
+              <div class="flow-sub">6 CSV datasets from Unity Catalog Volume</div>
+            </div>
+            <div class="flow-phase">
+              <span class="flow-arrow">→</span>
+              <div class="flow-node" style="border-color:#f97316; background:#fff8f0;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="1.8"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+              </div>
+              <div class="flow-label">Bronze</div>
+              <div class="flow-sub">Raw ingest + explicit schema + file metadata</div>
+            </div>
+            <div class="flow-phase">
+              <span class="flow-arrow">→</span>
+              <div class="flow-node" style="border-color:#6b7280; background:#f5f5f5;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <div class="flow-label">Silver</div>
+              <div class="flow-sub">Entity-specific DQ + type casting + normalisation</div>
+            </div>
+            <div class="flow-phase">
+              <span class="flow-arrow">→</span>
+              <div class="flow-node" style="border-color:#ca8a04; background:#fffcf0;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#ca8a04" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </div>
+              <div class="flow-label">Gold</div>
+              <div class="flow-sub">Joined dims + FX metrics + denorm view</div>
+            </div>
+            <div class="flow-phase">
+              <div class="flow-node">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div class="flow-label">Genie + Dashboard</div>
+              <div class="flow-sub">AI/BI NL queries + BI visualisation</div>
+            </div>
+          </div>
+        </div>
+        <div class="flow-steps">
+          <div class="flow-step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <strong>Catalog & Schema Setup</strong>
+              <span>setup_catalog.ipynb creates the ecommerce Unity Catalog with Bronze, Silver, and Gold schemas. Source data sits in a Unity Catalog Volume at /Volumes/ecommerce/source_data/raw/ — accessible to all notebooks without external S3 credentials.</span>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <strong>Bronze — Dimension Ingestion (1_dim_bronze)</strong>
+              <span>Five dimension CSVs (brands, category, products, customers, date) are read with explicit StructType schemas — keeping anomalous columns as StringType where data quality issues are known (e.g. weight_grams, length_cm). File path and ingest timestamp added per record. Written to six Bronze Delta tables with mergeSchema.</span>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <strong>Bronze — Fact Ingestion (1_fact_bronze)</strong>
+              <span>order_items CSVs from the landing folder loaded with all-StringType schema to safely handle mixed-format values (currency symbols, word quantities like "Two", percentage signs). File metadata captured per row.</span>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <strong>Silver — Dimension DQ Transformations (2_dim_silver)</strong>
+              <span>Each dimension runs its own transformation logic: brands (trim names, strip special chars from codes, remap anomalous category_codes); category (dedup, uppercase); products (unit stripping from weight, decimal fix on length, case normalisation, material spelling correction, abs on negative ratings); customers (region derivation from country+state maps).</span>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="step-num">5</div>
+            <div class="step-content">
+              <strong>Silver — Fact DQ Transformations (2_fact_silver)</strong>
+              <span>order_items cleaned: dedup on (order_id, item_seq); quantity word-to-int ("Two"→2); currency symbol and percent strip from prices; multi-format timestamp parsing for both dt and order_ts; channel label normalisation; tax_amount non-numeric stripping. All columns properly typed.</span>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="step-num">6</div>
+            <div class="step-content">
+              <strong>Gold — Dimension Joins & Region Enrichment (3_dim_gold)</strong>
+              <span>gld_dim_products built via SQL CTE joining products × brands × category with COALESCE for missing lookups. gld_dim_customers enriched with a region column derived from a country-aware state mapping dictionary converted to a PySpark UDF.</span>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="step-num">7</div>
+            <div class="step-content">
+              <strong>Gold — Revenue Metrics & FX Conversion (3_fact_gold)</strong>
+              <span>Four revenue metrics derived per order line: gross_amount, discount_amount (ceiling), net_amount, and net_amount_inr (via FX join + ceiling). date_id generated as yyyyMMdd integer for dimension joins. coupon_flag set. Final gld_fact_order_items written to Gold Delta table.</span>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="step-num">8</div>
+            <div class="step-content">
+              <strong>Denormalised View + Genie Exploration + Dashboard</strong>
+              <span>fact_transactions_denorm view joins gld_fact_order_items with gld_dim_date and gld_dim_products, adding hour_of_day. Databricks AI/BI Genie uses this view to answer natural language questions on revenue trends, top products, channel performance, and customer geography.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- d. DATA FLOW -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-num">d</div>
+        <h2 class="section-title">Data Flow Diagram</h2>
+      </div>
+      <div class="section-divider"></div>
+      <div class="dataflow-grid">
+        <div class="df-cell">
+          <div class="df-cell-title">Source Inputs</div>
+          <div class="df-item"><div class="df-dot"></div>brands.csv (brand_code · brand_name · category_code)</div>
+          <div class="df-item"><div class="df-dot"></div>category.csv (category_code · category_name)</div>
+          <div class="df-item"><div class="df-dot"></div>products.csv (product_id · sku · category · brand · dimensions · rating)</div>
+          <div class="df-item"><div class="df-dot"></div>customers.csv (customer_id · phone · country_code · country · state)</div>
+          <div class="df-item"><div class="df-dot"></div>date.csv (date dimension attributes)</div>
+          <div class="df-item"><div class="df-dot"></div>order_items/landing/order_items_YYYY-MM-DD.csv</div>
+          <div class="df-item"><div class="df-dot"></div>Fields: dt · order_ts · customer_id · order_id · item_seq · product_id · quantity · currency · unit_price · discount_pct · tax_amount · channel · coupon_code</div>
+          <div class="df-item"><div class="df-dot"></div>FX rates dict (7 currencies → INR)</div>
+          <div class="df-item"><div class="df-dot"></div>Country-state region maps (7 countries)</div>
+        </div>
+        <div class="df-cell center">
+          <div class="df-center-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+          </div>
+          <div class="df-center-label">eCommerce Pipeline</div>
+          <div style="font-size:11px; color:var(--ink-muted); margin-top:6px; font-weight:300;">PySpark · Delta Lake · Unity Catalog</div>
+          <div style="margin-top:16px; font-size:11px; color:var(--ink-muted); line-height:1.9; font-weight:300; text-align:left; width:100%;">
+            ✦ Explicit schema enforcement<br/>
+            ✦ Unity Catalog Volume reads<br/>
+            ✦ Entity-specific DQ rules<br/>
+            ✦ SQL CTE joins at Gold<br/>
+            ✦ FX broadcast join<br/>
+            ✦ Region UDF mapping<br/>
+            ✦ Derived revenue metrics<br/>
+            ✦ Delta overwrite + mergeSchema
+          </div>
+        </div>
+        <div class="df-cell">
+          <div class="df-cell-title">Outputs</div>
+          <div class="df-item"><div class="df-dot"></div>ecommerce.gold.gld_dim_products (enriched with brand + category names)</div>
+          <div class="df-item"><div class="df-dot"></div>ecommerce.gold.gld_dim_customers (+ region column)</div>
+          <div class="df-item"><div class="df-dot"></div>ecommerce.gold.gld_dim_date</div>
+          <div class="df-item"><div class="df-dot"></div>ecommerce.gold.gld_fact_order_items (gross · discount · net · net_inr · coupon_flag · date_id)</div>
+          <div class="df-item"><div class="df-dot"></div>ecommerce.gold.fact_transactions_denorm (denorm view + hour_of_day)</div>
+          <div class="df-item"><div class="df-dot"></div>AI/BI Genie NL query results</div>
+          <div class="df-item"><div class="df-dot"></div>BI Dashboard (revenue, product, customer, channel analytics)</div>
+        </div>
+      </div>
+
+      <!-- Schema reference -->
+      <div style="margin-top: 20px; background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 24px;">
+        <div class="df-cell-title" style="margin-bottom: 14px;">Gold fact_order_items — Key Fields</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; font-size: 12.5px; color: var(--ink-muted); font-weight: 300;">
+          <div><div style="font-weight:500;color:var(--ink);margin-bottom:6px;font-size:12px;">Identifiers</div>date_id · transaction_date · transaction_ts · transaction_id · customer_id · seq_no · product_id</div>
+          <div><div style="font-weight:500;color:var(--ink);margin-bottom:6px;font-size:12px;">Order Attributes</div>channel · coupon_code · coupon_flag · unit_price_currency · quantity · unit_price · discount_percent</div>
+          <div><div style="font-weight:500;color:var(--ink);margin-bottom:6px;font-size:12px;">Derived Metrics</div>gross_amount · discount_amount · tax_amount · net_amount · net_amount_inr</div>
+          <div><div style="font-weight:500;color:var(--ink);margin-bottom:6px;font-size:12px;">Denorm View Adds</div>year · month_name · day_name · is_weekend · quarter · week · sku · category_name · brand_name · color · size · rating_count · hour_of_day</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- e. TECH STACK -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-num">e</div>
+        <h2 class="section-title">Technology Stack</h2>
+      </div>
+      <div class="section-divider"></div>
+      <div class="tech-grid">
+        <div class="tech-card">
+          <div class="tech-layer">Platform</div>
+          <div class="tech-name">Databricks</div>
+          <div class="tech-detail">Unity Catalog; Databricks Notebooks with %sql magic and Python cells; cluster-managed Spark runtime</div>
+          <div class="tech-version">Unity Catalog</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-layer">Processing</div>
+          <div class="tech-name">Apache Spark (PySpark)</div>
+          <div class="tech-detail">DataFrame API; F.when, F.regexp_replace, F.coalesce, F.ceil, F.abs, F.upper, F.trim; StructType explicit schemas; broadcast join for FX rates</div>
+          <div class="tech-version">PySpark 3.x</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-layer">Storage Format</div>
+          <div class="tech-name">Delta Lake</div>
+          <div class="tech-detail">ACID transactions; Delta overwrite with mergeSchema across all 12 tables; time travel and audit capability</div>
+          <div class="tech-version">Delta 3.x</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-layer">Data Access</div>
+          <div class="tech-name">Unity Catalog Volumes</div>
+          <div class="tech-detail">Raw CSVs stored in Unity Catalog Volume (/Volumes/ecommerce/source_data/raw/) — governed, credential-free access from notebooks</div>
+          <div class="tech-version">UC Volumes</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-layer">Query Layer</div>
+          <div class="tech-name">Spark SQL</div>
+          <div class="tech-detail">%sql magic cells; CREATE OR REPLACE TABLE with CTE; CREATE OR REPLACE VIEW; EXTRACT(HOUR); COALESCE for null handling</div>
+          <div class="tech-version">SQL + PySpark</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-layer">AI/BI</div>
+          <div class="tech-name">Databricks Genie</div>
+          <div class="tech-detail">Natural language to SQL exploration on the Gold denorm view; pre-defined business questions for revenue, product, customer, and channel analysis</div>
+          <div class="tech-version">AI/BI Genie</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-layer">Dashboard</div>
+          <div class="tech-name">Databricks BI Dashboard</div>
+          <div class="tech-detail">Connected to fact_transactions_denorm Gold view; revenue trend, top products, channel comparison, customer geography visualisations</div>
+          <div class="tech-version">Databricks BI</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-layer">Language</div>
+          <div class="tech-name">Python + SQL</div>
+          <div class="tech-detail">PySpark for all transformations; %sql magic for DDL and view creation; Python dicts for FX rates and region mapping</div>
+          <div class="tech-version">Python 3 · SQL</div>
+        </div>
+        <div class="tech-card">
+          <div class="tech-layer">Catalog</div>
+          <div class="tech-name">Unity Catalog</div>
+          <div class="tech-detail">ecommerce catalog; three-level namespace (catalog.schema.table); 12 managed Delta tables across bronze/silver/gold schemas</div>
+          <div class="tech-version">3-level namespace</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="cta-bar">
+      <div class="cta-text">
+        <strong>View the Source Code</strong>
+        <span>All Databricks notebooks, SQL scripts, sample datasets, and Genie exploration questions are available on GitHub.</span>
+      </div>
+      <a href="https://github.com/basalvivek/Databricks_eCommerse" target="_blank" class="cta-btn">
+        View on GitHub
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+      </a>
+    </div>
+
+  </div>
+</body>
+</html>
